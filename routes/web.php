@@ -20,3 +20,7 @@ Route::post('actionlogin', [LoginController::class, 'actionlogin'])->name('actio
 
 Route::get('table', [HomeController::class, 'index'])->name('table')->middleware('auth');
 Route::get('actionlogout', [LoginController::class, 'actionlogout'])->name('actionlogout')->middleware('auth');
+
+
+Route::get('table', [HomeController::class, 'index'])->name('table');
+Route::get('/get-latest-project', [HomeController::class, 'getLatestProjects']);

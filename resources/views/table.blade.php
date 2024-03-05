@@ -453,7 +453,7 @@
                                 <div class="tables-header">
                                     <div class="tables-header-item">
                                         <div>
-                                            <button class="btn"><i class="fa-solid fa-arrow-rotate-right" style="color: #255271"></i></button>
+                                            <button class="btn" onclick="reloadProjects()"><i class="fa-solid fa-arrow-rotate-right" style="color: #255271"></i></button>
                                         </div>
                                         <div style="display: flex; align-items: center;">
                                             <button style="margin-right: 5px"><i class="fa-solid fa-file-export" style="color: #255271"></i></button>
@@ -484,39 +484,31 @@
                                     <table class="table table-data2">
                                         <thead class="text-center">
                                             <tr class="table-header">
-                                                <th>
-                                                    <label class="au-checkbox">
-                                                        <input type="checkbox">
-                                                        <span class="au-checkmark"></span>
-                                                    </label>
-                                                </th>
-                                                <th>name</th>
-                                                <th>email</th>
-                                                <th>description</th>
-                                                <th>date</th>
+                                                <th>input date</th>
+                                                <th>project</th>
+                                                <th>requestor</th>
                                                 <th>status</th>
-                                                <th>price</th>
+                                                <th>pic</th>
+                                                <th>ETA</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach ($projects as $item)
+                                                
+                                            
                                             <tr class="tr-shadow">
+                                                
+                                                <td>{{ $item->input_date }}</td>
                                                 <td>
-                                                    <label class="au-checkbox">
-                                                        <input type="checkbox">
-                                                        <span class="au-checkmark"></span>
-                                                    </label>
+                                                    {{ $item->nama_project }}
                                                 </td>
-                                                <td>Lori Lynch</td>
+                                                <td class="desc">{{ $item->requestor }}</td>
+                                                <td>{{ $item->status }}</td>
                                                 <td>
-                                                    <span class="block-email">lori@example.com</span>
+                                                    <span class="status--process">{{ $item->pic_project }}</span>
                                                 </td>
-                                                <td class="desc">Samsung S8 Black</td>
-                                                <td>2018-09-27 02:12</td>
-                                                <td>
-                                                    <span class="status--process">Processed</span>
-                                                </td>
-                                                <td>$679.00</td>
+                                                <td>{{ $item->eta_project }}</td>
                                                 <td>
                                                     <div class="table-data-feature">
                                                         <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
@@ -534,111 +526,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr class="spacer"></tr>
-                                            <tr class="tr-shadow">
-                                                <td>
-                                                    <label class="au-checkbox">
-                                                        <input type="checkbox">
-                                                        <span class="au-checkmark"></span>
-                                                    </label>
-                                                </td>
-                                                <td>Lori Lynch</td>
-                                                <td>
-                                                    <span class="block-email">john@example.com</span>
-                                                </td>
-                                                <td class="desc">iPhone X 64Gb Grey</td>
-                                                <td>2018-09-29 05:57</td>
-                                                <td>
-                                                    <span class="status--process">Processed</span>
-                                                </td>
-                                                <td>$999.00</td>
-                                                <td>
-                                                    <div class="table-data-feature">
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
-                                                            <i class="zmdi zmdi-mail-send"></i>
-                                                        </button>
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
-                                                            <i class="zmdi zmdi-edit"></i>
-                                                        </button>
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
-                                                            <i class="zmdi zmdi-delete"></i>
-                                                        </button>
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="More">
-                                                            <i class="zmdi zmdi-more"></i>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr class="spacer"></tr>
-                                            <tr class="tr-shadow">
-                                                <td>
-                                                    <label class="au-checkbox">
-                                                        <input type="checkbox">
-                                                        <span class="au-checkmark"></span>
-                                                    </label>
-                                                </td>
-                                                <td>Lori Lynch</td>
-                                                <td>
-                                                    <span class="block-email">lyn@example.com</span>
-                                                </td>
-                                                <td class="desc">iPhone X 256Gb Black</td>
-                                                <td>2018-09-25 19:03</td>
-                                                <td>
-                                                    <span class="status--denied">Denied</span>
-                                                </td>
-                                                <td>$1199.00</td>
-                                                <td>
-                                                    <div class="table-data-feature">
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
-                                                            <i class="zmdi zmdi-mail-send"></i>
-                                                        </button>
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
-                                                            <i class="zmdi zmdi-edit"></i>
-                                                        </button>
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
-                                                            <i class="zmdi zmdi-delete"></i>
-                                                        </button>
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="More">
-                                                            <i class="zmdi zmdi-more"></i>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr class="spacer"></tr>
-                                            <tr class="tr-shadow">
-                                                <td>
-                                                    <label class="au-checkbox">
-                                                        <input type="checkbox">
-                                                        <span class="au-checkmark"></span>
-                                                    </label>
-                                                </td>
-                                                <td>Lori Lynch</td>
-                                                <td>
-                                                    <span class="block-email">doe@example.com</span>
-                                                </td>
-                                                <td class="desc">Camera C430W 4k</td>
-                                                <td>2018-09-24 19:10</td>
-                                                <td>
-                                                    <span class="status--process">Processed</span>
-                                                </td>
-                                                <td>$699.00</td>
-                                                <td>
-                                                    <div class="table-data-feature">
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
-                                                            <i class="zmdi zmdi-mail-send"></i>
-                                                        </button>
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
-                                                            <i class="zmdi zmdi-edit"></i>
-                                                        </button>
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
-                                                            <i class="zmdi zmdi-delete"></i>
-                                                        </button>
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="More">
-                                                            <i class="zmdi zmdi-more"></i>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -693,6 +581,38 @@
 
     <!-- Jquery JS-->
     <script src="vendor/jquery-3.2.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script>
+        // Function to fetch and update data
+        function reloadProjects() {
+            $.ajax({
+                url: '/get-latest-project', // Laravel route
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Update HTML with new data
+                    var projectContainer = $('#project-container');
+                    projectContainer.empty(); // Clear existing data
+
+                    // Loop through projects and append to the container
+                    $.each(data, function (index, project) {
+                        projectContainer.append('<div>' + project.name + '</div>');
+                        // Adjust the HTML structure based on your project data
+                    });
+                },
+                error: function (error) {
+                    console.error('Error fetching data:', error);
+                }
+            });
+        }
+
+        // Call the function on page load or based on some trigger
+        $(document).ready(function () {
+            reloadProjects();
+        });
+    </script>
+
     <script>
         $(document).ready(function(){
             $('#datepicker').datepicker();

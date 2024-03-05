@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Project;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -11,9 +12,18 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('table');
+        $projects = Project::all();
+        return view('table', compact('projects'));
     }
 
+
+    // HomeController.php
+    public function getLatestProjects()
+    {
+        $projects = Project::latest()->get(); // Adjust as needed
+        return response()->json($projects);
+    }
+    
     /**
      * Show the form for creating a new resource.
      */
