@@ -453,7 +453,7 @@
                                 <div class="tables-header">
                                     <div class="tables-header-item">
                                         <div>
-                                            <button class="btn" onclick="reloadProjects()"><i class="fa-solid fa-arrow-rotate-right" style="color: #255271"></i></button>
+                                            <button type="button" class="btn" onclick="reloadProjects()"><i class="fa-solid fa-arrow-rotate-right" style="color: #255271"></i></button>
                                         </div>
                                         <div style="display: flex; align-items: center;">
                                             <button style="margin-right: 5px"><i class="fa-solid fa-file-export" style="color: #255271"></i></button>
@@ -586,31 +586,60 @@
     <script>
         // Function to fetch and update data
         function reloadProjects() {
-            $.ajax({
-                url: '/get-latest-project', // Laravel route
-                method: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    // Update HTML with new data
-                    var projectContainer = $('#project-container');
-                    projectContainer.empty(); // Clear existing data
+    // Make an AJAX request to get the latest project data from the server
+    $.ajax({
+        url: '/get-latest-projects', // Adjust the route based on your Laravel setup
+        method: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            // Update HTML with new data
+            var tbody = $('.table-responsive-data2 tbody');
+            tbody.empty(); // Clear existing data
 
-                    // Loop through projects and append to the container
-                    $.each(data, function (index, project) {
-                        projectContainer.append('<div>' + project.name + '</div>');
-                        // Adjust the HTML structure based on your project data
-                    });
-                },
-                error: function (error) {
-                    console.error('Error fetching data:', error);
-                }
+            // Loop through projects and append to the tbody
+            $.each(data, function (index, project) {
+                // Adjust the HTML structure based on your project data
+                var rowHtml = `
+                    <tr class="tr-shadow">
+                        <td>${project.input_date}</td>
+                        <td>${project.nama_project}</td>
+                        <td class="desc">${project.requestor}</td>
+                        <td>${project.status}</td>
+                        <td><span class="status--process">${project.pic_project}</span></td>
+                        <td>${project.eta_project}</td>
+                        <td>
+                            <div class="table-data-feature">
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
+                                    <i class="zmdi zmdi-mail-send"></i>
+                                </button>
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                    <i class="zmdi zmdi-edit"></i>
+                                </button>
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
+                                    <i class="zmdi zmdi-delete"></i>
+                                </button>
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="More">
+                                    <i class="zmdi zmdi-more"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+
+                tbody.append(rowHtml);
             });
+        },
+        error: function (error) {
+            console.error('Error fetching data:', error);
         }
+    });
+}
 
-        // Call the function on page load or based on some trigger
-        $(document).ready(function () {
-            reloadProjects();
-        });
+// Call the function on page load or based on some trigger
+$(document).ready(function () {
+    reloadProjects();
+});
+
     </script>
 
     <script>

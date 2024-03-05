@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('status');
             $table->string('pic_project');
             $table->date('eta_project');
+            $table->timestamps();
         });
     }
 

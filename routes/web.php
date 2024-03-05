@@ -23,4 +23,4 @@ Route::get('actionlogout', [LoginController::class, 'actionlogout'])->name('acti
 
 
 Route::get('table', [HomeController::class, 'index'])->name('table');
-Route::get('/get-latest-project', [HomeController::class, 'getLatestProjects']);
+Route::get('/get-latest-projects', [HomeController::class, 'getLatestProjects']);
