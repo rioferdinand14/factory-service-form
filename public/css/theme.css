@@ -4488,14 +4488,14 @@ section {
 }
 
 .table-data2.table thead th {
+    text-align: left;
     font-size: 12px;
     color: #555;
     text-transform: uppercase;
     border: none;
     font-weight: 600;
     vertical-align: top;
-    padding: 15px 40px;
-    padding-right: 10px;
+    padding: 15px;
 }
 
 .table-data2.table thead th:first-child {
@@ -4513,7 +4513,6 @@ section {
     -webkit-border-bottom-left-radius: 3px;
     -moz-border-radius-bottomleft: 3px;
     border-bottom-left-radius: 3px;
-    vertical-align: top;
 }
 
 .table-data2.table tbody tr td:first-child .au-checkbox {
@@ -4541,12 +4540,42 @@ section {
 }
 
 .table-data2.table tbody td {
+    text-align: left;
     font-size: 14px;
     color: #808080;
-    vertical-align: middle;
-    padding: 25px 40px;
-    padding-right: 10px;
+    vertical-align: top;
+    padding: 15px 15px 10px 15px;
     border: none;
+}
+
+td:nth-child(5),
+th:nth-child(5) {
+    max-width: 200px; /* Set a maximum width for the Update column */
+    word-wrap: break-word; /* Allow the text to wrap within the specified width */
+    
+}
+
+td:nth-child(5) span{
+    display: inline-block;
+    width: 70%;
+}
+
+.table-data2.table tbody td:nth-child(1), 
+.table-data2.table tbody td:nth-child(3),
+.table-data2.table tbody td:nth-child(6),
+.table-data2.table tbody td:nth-child(7),
+.table-data2.table tbody td:nth-child(8)
+ {
+    width: 8%;
+}
+.table-data2.table tbody td:nth-child(2){
+    width: 12%;
+}
+.table-data2.table tbody td:nth-child(4){
+    width: 9%;
+}
+.table-data2.table tbody td:nth-child(5){
+    width: 35%;
 }
 
 .table-data2.table tbody td.desc {
@@ -4760,6 +4789,11 @@ section {
     margin-right: 10px; /* Adjust the margin between items */
 }
 
+.update-column {
+    max-width: 300px; /* Adjust as needed for the update column */
+    text-align: left;
+}
+
 .export-text{
     width: 100%;
     margin-right: 5px;
@@ -4787,6 +4821,13 @@ section {
 .task > div{
     margin-right: 7px;
 }
+
+#datepicker {
+    z-index: 1600 !important; /* has to be larger than 1050 */
+  }
+#etapicker {
+    z-index: 1600 !important; /* has to be larger than 1050 */
+  }
 
 /* ----- Footer ----- */
 .copyright {

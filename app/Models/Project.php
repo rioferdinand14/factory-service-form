@@ -11,13 +11,14 @@ class Project extends Model
 
     protected $fillable = [
         'input_date',
+        'eta_project',
         'nama_project',
         'requestor',
         'category_project',
-        'description_project',
         'status',
         'pic_project',
-        'eta_project'
+        'description_project',
+        
     ];
 
 

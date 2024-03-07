@@ -8,6 +8,7 @@
     <meta name="description" content="au theme template">
     <meta name="author" content="Hau Nguyen">
     <meta name="keywords" content="au theme template">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Title Page--> 
     <title>Tables</title>
@@ -21,6 +22,7 @@
 
     <!-- Bootstrap CSS-->
     <link href="vendor/bootstrap-4.1/bootstrap.min.css" rel="stylesheet" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Vendor CSS-->
     <link href="vendor/animsition/animsition.min.css" rel="stylesheet" media="all">
@@ -33,6 +35,10 @@
 
     <!-- Main CSS-->
     <link href="css/theme.css" rel="stylesheet" media="all">
+
+    <script src="vendor/jquery-3.2.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
 
 </head>
 
@@ -470,7 +476,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="button" class="task" data-toggle="modal" data-target="#taskModal">
+                                    <button type="button" class="task" data-toggle="modal" data-target="#TaskModal">
                                         <div>
                                             <i class="fa-solid fa-list-check"></i>
                                         </div>
@@ -484,51 +490,46 @@
                                     <table class="table table-data2">
                                         <thead class="text-center">
                                             <tr class="table-header">
-                                                <th>input date</th>
-                                                <th>project</th>
-                                                <th>requestor</th>
-                                                <th>status</th>
-                                                <th>pic</th>
-                                                <th>ETA</th>
-                                                <th></th>
+                                                <th >input date</th>
+                                                <th >project</th>
+                                                <th >requestor</th>
+                                                <th >Category</th>
+                                                <th >Update</th>
+                                                <th >status</th>
+                                                <th >pic</th>
+                                                <th >ETA</th>
+                                                <th ></th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($projects as $item)
-                                                
-                                            
+                                        <tbody class="text-center">
+                                            @foreach ($projects as $item)                                                                                                                                            
                                             <tr class="tr-shadow">
-                                                
-                                                <td>{{ $item->input_date }}</td>
-                                                <td>
-                                                    {{ $item->nama_project }}
-                                                </td>
+                                                <td >{{ $item->input_date }}</td>
+                                                <td >{{ $item->nama_project }}</td>
                                                 <td class="desc">{{ $item->requestor }}</td>
-                                                <td>{{ $item->status }}</td>
-                                                <td>
+                                                <td >{{ $item->category_project }}</td>
+                                                <td >
+                                                   <span>{{ $item->description_project }}</span>
+                                                </td>
+                                                <td >{{ $item->status }}</td>
+                                                <td >
                                                     <span class="status--process">{{ $item->pic_project }}</span>
                                                 </td>
                                                 <td>{{ $item->eta_project }}</td>
                                                 <td>
-                                                    <div class="table-data-feature">
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
-                                                            <i class="zmdi zmdi-mail-send"></i>
-                                                        </button>
+                                                    <div class="table-data-feature">                                                        
                                                         <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
                                                             <i class="zmdi zmdi-edit"></i>
                                                         </button>
                                                         <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
                                                             <i class="zmdi zmdi-delete"></i>
-                                                        </button>
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="More">
-                                                            <i class="zmdi zmdi-more"></i>
-                                                        </button>
+                                                        </button>                                            
                                                     </div>
                                                 </td>
                                             </tr>
                                             @endforeach
                                         </tbody>
-                                    </table>
+                                    </table>                                
                                 </div>
                                 <!-- END DATA TABLE -->
                             </div>
@@ -539,8 +540,8 @@
                 </div>
             </div>
             <!-- MODAL CONTENT-->
-            <div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal fade" id="TaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title" id="exampleModalLongTitle">Add Task</h5>
@@ -549,105 +550,106 @@
                       </button>
                     </div>
                     <div class="modal-body">
-                        <form action="" method="POST">
+                        <form id="addTask" action="{{ route('create-data') }}" method="POST" autocomplete="off">
                             @csrf
                             <div class="container-fluid">                        
-                                <div class="row">
-                                    <label for="date" class="col-1 col-form-label">Date</label>
-                                    <div class="col-md-4">
-                                        <div class="input-group date" id="datepickerContainer">
-                                            <input type="text" class="form-control datepicker" id="datepicker" name="date"/>
-                                            <span class="input-group-append">
-                                                <span class="input-group-text bg-light d-block">
-                                                    <i class="fa fa-calendar"></i>
+                                <div class="row">                                                                    
+                                    <div class="col-sm-5 col-md-6">
+                                        <div class="mb-3">
+                                            <label for="date" class="align-items-start">Date:</label>
+                                            <div class="input-group date w-100" id="datepickerContainer">
+                                                <input type="text" class="form-control datepicker " id="datepicker" name="input_date" />
+                                                <span class="input-group-append">
+                                                    <span class="input-group-text bg-light d-block">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </span>
                                                 </span>
-                                            </span>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="eta" class="align-items-start">ETA:</label>
+                                            <div class="input-group date w-100" id="datepickerContainer">
+                                                <input type="text" class="form-control datepicker " id="etapicker" name="eta_project"/>
+                                                <span class="input-group-append">
+                                                    <span class="input-group-text bg-light d-block">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="requestor" class="align-items-start">Requestor:</label>
+                                            <input type="text" class="form-control w-100" name="requestor">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="pic" class="align-items-start">PIC:</label>
+                                            <input type="text" class="form-control w-100" name="pic_project">
                                         </div>
                                     </div>
-                                    <div class="col-md-4 ml-auto">.col-md-4 .ml-auto</div>                                                         
+                                    <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
+                                        <div class="mb-3">
+                                            <label for="project" class="align-items-start">Project:</label>
+                                            <input type="text" class="form-control w-100" name="nama_project">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="category" class="align-items-start">Category:</label>
+                                            <input type="text" class="form-control w-100" name="category_project">
+                                        </div>
+                                        <div class="mb-3" >                                        
+                                            <label for="status">Status</label>                                                            
+                                                <select class="form-select w-100" aria-label="Default select example" name="status">
+                                                <option selected>Open this select menu</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>     
+                                        <div class="mb-3">
+                                            <label for="update_status">Update Status</label>
+                                            <textarea class="form-control w-100" style="border: 1px solid; border-color:rgb(223, 223, 223)" name="description_project" id="" cols="30" rows="10"></textarea>
+                                        </div>                                                    
+                                    </div>
                                 </div>
-                            </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                <button type="submit" name="submit"  class="btn btn-primary" >Submit</button>
                             </div>
                         </form>
                     </div>
                 </div>
               </div>
-        </div>
+            </div>
 
     </div>
 
     <!-- Jquery JS-->
-    <script src="vendor/jquery-3.2.1.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    
 
-    <script>
-        // Function to fetch and update data
-        function reloadProjects() {
-    // Make an AJAX request to get the latest project data from the server
-    $.ajax({
-        url: '/get-latest-projects', // Adjust the route based on your Laravel setup
-        method: 'GET',
-        dataType: 'json',
-        success: function (data) {
-            // Update HTML with new data
-            var tbody = $('.table-responsive-data2 tbody');
-            tbody.empty(); // Clear existing data
-
-            // Loop through projects and append to the tbody
-            $.each(data, function (index, project) {
-                // Adjust the HTML structure based on your project data
-                var rowHtml = `
-                    <tr class="tr-shadow">
-                        <td>${project.input_date}</td>
-                        <td>${project.nama_project}</td>
-                        <td class="desc">${project.requestor}</td>
-                        <td>${project.status}</td>
-                        <td><span class="status--process">${project.pic_project}</span></td>
-                        <td>${project.eta_project}</td>
-                        <td>
-                            <div class="table-data-feature">
-                                <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
-                                    <i class="zmdi zmdi-mail-send"></i>
-                                </button>
-                                <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
-                                    <i class="zmdi zmdi-edit"></i>
-                                </button>
-                                <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
-                                    <i class="zmdi zmdi-delete"></i>
-                                </button>
-                                <button class="item" data-toggle="tooltip" data-placement="top" title="More">
-                                    <i class="zmdi zmdi-more"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-
-                tbody.append(rowHtml);
-            });
-        },
-        error: function (error) {
-            console.error('Error fetching data:', error);
-        }
-    });
-}
-
-// Call the function on page load or based on some trigger
-$(document).ready(function () {
-    reloadProjects();
-});
-
-    </script>
-
+    
     <script>
         $(document).ready(function(){
-            $('#datepicker').datepicker();
+            $('#datepicker').datepicker({
+            onSelect: function(dateText, inst) {
+                // Set the value of the associated input field to the selected date
+                $(this).val(dateText);
+            }
+        });
+            $('.datepickerInput').datepicker('setDate', new Date());
         });
     </script>
+    <script>
+        $(document).ready(function(){
+            $('#etapicker').datepicker({
+            onSelect: function(dateText, inst) {
+                // Set the value of the associated input field to the selected date
+                $(this).val(dateText);
+            }
+        });
+            $('.datepickerInput').datepicker('setDate', new Date());
+        });
+    </script>
+
     <!-- Bootstrap JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/bootstrap-4.1/popper.min.js"></script>
     <script src="vendor/bootstrap-4.1/bootstrap.min.js"></script>
     <!-- Vendor JS       -->

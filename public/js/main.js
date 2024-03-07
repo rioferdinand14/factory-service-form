@@ -1,3 +1,108 @@
+(function($) {
+
+	"use strict";
+
+	$(".toggle-password").click(function() {
+
+  $(this).toggleClass("fa-eye fa-eye-slash");
+  var input = $($(this).attr("toggle"));
+  if (input.attr("type") == "password") {
+    input.attr("type", "text");
+  } else {
+    input.attr("type", "password");
+  }
+});
+
+})(jQuery);
+
+    // Function to fetch and update data
+    function reloadProjects() {
+    // Make an AJAX request to get the latest project data from the server
+    $.ajax({
+        url: '/get-latest-projects', // Adjust the route based on your Laravel setup
+        method: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            // Update HTML with new data
+            var tbody = $('.table-responsive-data2 tbody');
+            tbody.empty(); // Clear existing data
+
+            // Loop through projects and append to the tbody
+            $.each(data, function (index, project) {
+                // Adjust the HTML structure based on your project data
+                var rowHtml = `
+                    <tr class="tr-shadow">
+                        <td >${project.input_date}</td>
+                        <td >${project.nama_project}</td>
+                        <td desc">${project.requestor}</td>
+                        <td >${project.category_project}</td>
+                        <td >
+                        <span>${project.description_project}</span>
+                        </td>
+                        <td >${project.status}</td>
+                        <td ><span ">${project.pic_project}</span></td>
+                        <td >${project.eta_project}</td>
+                        <td>
+                            <div class="table-data-feature">                                
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                    <i class="zmdi zmdi-edit"></i>
+                                </button>
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
+                                    <i class="zmdi zmdi-delete"></i>
+                                </button>                                
+                            </div>
+                        </td>
+                    </tr>
+                `;
+
+                tbody.append(rowHtml);
+            });
+        },
+        error: function (error) {
+            console.error('Error fetching data:', error);
+        }
+    });
+}
+
+// Call the function on page load or based on some trigger
+$(document).ready(function () {
+    reloadProjects();
+});
+
+
+$(document).ready(function () {
+  $('#addTask').submit(function (e) {
+      e.preventDefault();
+
+      var csrfToken = $('meta[name="csrf-token"]').attr('content');
+    
+      // Use AJAX to submit the form
+      $.ajax({
+          url: '/create-data',
+          method: 'POST',
+          headers: {
+            'X-CSRF-TOKEN': csrfToken
+          },
+          data: $(this).serialize(),
+          success: function (response) {
+              // Close the modal
+              $('#TaskModal').modal('hide');
+
+              // Update the table (Assuming you have a function to update the table)
+              reloadProjects();
+          },
+          error: function (xhr) {
+              console.error(xhr.responseText);
+          }
+      });
+  });
+
+  // function updateTable(data) {
+  //     // Add logic to dynamically update your table
+  //     // For example, append a new row to the table with the returned data
+  //     // You can use jQuery or vanilla JavaScript to manipulate the DOM
+  // }
+});
 
 (function ($) {
   // USE STRICT
