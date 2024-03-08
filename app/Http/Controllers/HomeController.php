@@ -76,7 +76,8 @@ class HomeController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $projects = Project::find($id);
+        return response()->json(['status' => 'sucess', 'data' => $projects]);
     }
 
     /**

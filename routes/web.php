@@ -18,10 +18,11 @@ use App\Http\Controllers\LoginController;
 Route::get('/', [LoginController::class, 'login'])->name('login');
 Route::post('actionlogin', [LoginController::class, 'actionlogin'])->name('actionlogin');
 
-Route::get('table', [HomeController::class, 'index'])->name('table')->middleware('auth');
-Route::get('actionlogout', [LoginController::class, 'actionlogout'])->name('actionlogout')->middleware('auth');
+Route::middleware(['auth'])->group(function(){
+    Route::get('table', [HomeController::class, 'index'])->name('table');
+    Route::get('actionlogout', [LoginController::class, 'actionlogout'])->name('actionlogout');
+    Route::get('/get-latest-projects', [HomeController::class, 'getLatestProjects']);
+    Route::post('/create-data', [HomeController::class, 'store'])->name('create-data');
 
-
-Route::get('table', [HomeController::class, 'index'])->name('table');
-Route::get('/get-latest-projects', [HomeController::class, 'getLatestProjects']);
-Route::post('/create-data', [HomeController::class, 'store'])->name('create-data');
+    Route::get('/edit/{id}', [HomeController::class, 'edit'])->name('edit-data');
+});

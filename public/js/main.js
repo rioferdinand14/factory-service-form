@@ -15,6 +15,8 @@
 
 })(jQuery);
 
+
+
     // Function to fetch and update data
     function reloadProjects() {
     // Make an AJAX request to get the latest project data from the server
@@ -44,7 +46,7 @@
                         <td >${project.eta_project}</td>
                         <td>
                             <div class="table-data-feature">                                
-                                <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                <button type="button" class="item" data-toggle="modal" data-target="#editModal${project.id}" data-placement="top" title="Edit">
                                     <i class="zmdi zmdi-edit"></i>
                                 </button>
                                 <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
@@ -70,6 +72,7 @@ $(document).ready(function () {
 });
 
 
+
 $(document).ready(function () {
   $('#addTask').submit(function (e) {
       e.preventDefault();
@@ -86,8 +89,13 @@ $(document).ready(function () {
           data: $(this).serialize(),
           success: function (response) {
               // Close the modal
-              $('#TaskModal').modal('hide');
+              if (response.status === 'success') {
+                // Display a success dialog box
+                alert('Data Berhasil Ditambahkan');
 
+                // Optionally, you can close the modal or perform other actions.
+                $('#taskModal').modal('hide');
+            }
               // Update the table (Assuming you have a function to update the table)
               reloadProjects();
           },
