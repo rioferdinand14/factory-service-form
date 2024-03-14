@@ -23,6 +23,5 @@ Route::middleware(['auth'])->group(function(){
     Route::get('actionlogout', [LoginController::class, 'actionlogout'])->name('actionlogout');
     Route::get('/get-latest-projects', [HomeController::class, 'getLatestProjects']);
     Route::post('/create-data', [HomeController::class, 'store'])->name('create-data');
-
     Route::get('/edit/{id}', [HomeController::class, 'edit'])->name('edit-data');
 });

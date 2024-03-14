@@ -4557,7 +4557,9 @@ th:nth-child(5) {
 
 td:nth-child(5) span{
     display: inline-block;
-    width: 70%;
+    width: 28%;
+    height: 80px;
+    padding: 5px 5px;
 }
 
 .table-data2.table tbody td:nth-child(1), 
@@ -4575,7 +4577,7 @@ td:nth-child(5) span{
     width: 9%;
 }
 .table-data2.table tbody td:nth-child(5){
-    width: 35%;
+    width: 30%;
 }
 
 .table-data2.table tbody td.desc {

@@ -13,17 +13,19 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $projects = Project::orderBy('input_date', 'desc')->get();
+        $projects = Project::orderBy('id', 'desc')->paginate(5);
         return view('table', compact('projects'));
+
     }
 
 
-    // HomeController.php
-    // HomeController.php
     public function getLatestProjects()
     {
-        $projects = Project::orderBy('input_date', 'desc')->latest()->get(); // Adjust as needed
-        return response()->json($projects);
+        $projects = Project::orderBy('id', 'desc')->latest()->paginate(5); // Adjust as needed
+        return response()->json([
+            'data' => $projects->items(), // Get the data items
+            'links' => $projects->links()->toHtml(), // Get pagination links as HTML
+        ]);
     }
 
     

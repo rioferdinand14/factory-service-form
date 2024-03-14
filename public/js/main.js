@@ -17,7 +17,7 @@
 
 
 
-    // Function to fetch and update data
+    //Function to fetch and update data
     function reloadProjects() {
     // Make an AJAX request to get the latest project data from the server
     $.ajax({
@@ -30,19 +30,19 @@
             tbody.empty(); // Clear existing data
 
             // Loop through projects and append to the tbody
-            $.each(data, function (index, project) {
+            $.each(data, function (_index, project) {
                 // Adjust the HTML structure based on your project data
                 var rowHtml = `
-                    <tr class="tr-shadow">
+                    <tr class="tr">
                         <td >${project.input_date}</td>
                         <td >${project.nama_project}</td>
-                        <td desc">${project.requestor}</td>
+                        <td class="desc">${project.requestor}</td>
                         <td >${project.category_project}</td>
                         <td >
                         <span>${project.description_project}</span>
                         </td>
                         <td >${project.status}</td>
-                        <td ><span ">${project.pic_project}</span></td>
+                        <td ><span class="status--process">${project.pic_project}</span></td>
                         <td >${project.eta_project}</td>
                         <td>
                             <div class="table-data-feature">                                
@@ -71,7 +71,64 @@ $(document).ready(function () {
     reloadProjects();
 });
 
+// Function to refresh table data
+function refreshTable(page) {
+      $.ajax({
+          url: '/get-latest-projects?page=' + page, // URL to fetch updated data
+          method: 'GET',
+          success: function(response) {
+              // Update table with new data
+              $('#dataTable tbody').html(' '); // Assuming data is HTML for the table body only
+              
+              $.each(response.data, function(index, item) {
+                var row = '<tr class="tr">';
+                row += '<td>' + item.input_date + '</td>';
+                row += '<td>' + item.nama_project + '</td>';
+                row += '<td class="desc">' + item.requestor + '</td>';
+                row += '<td>' + item.category_project + '</td>';
+                row += '<td><span>' + item.description_project + '</span></td>';
+                row += '<td>' + item.status + '</td>';
+                row += '<td><span class="status--process">' + item.pic_project + '</span></td>';
+                row += '<td>' + item.eta_project + '</td>';
+                row += '<td><div class="table-data-feature" id="editContainer">';
+                row += '<button type="button" class="item" data-toggle="modal" data-target="#editModal' + item.id + '" data-placement="top" title="Edit"><i class="zmdi zmdi-edit"></i></button>';
+                row += '<button class="item" data-toggle="tooltip" data-placement="top" title="Delete"><i class="zmdi zmdi-delete"></i></button>';
+                row += '</div></td></tr>';
+                $('#dataTable tbody').append(row);
+              });
+             $('#pagination').html(response.links);
+             $('.pagination a[href="?page=' + currentPage + '"]').parent().addClass('active'); // Add active class to current page link
+             $('.pagination li').removeClass('active'); // Remove active class from all pagination items
+          },
+          error: function(xhr, status, error) {
+            console.error('Error refreshing table:', error);
+          }
+        });
+  }
 
+  refreshTable(1);
+
+  // Reload table when the button is clicked
+    $('#reloadButton').click(function() {
+        refreshTable(1);
+    });
+    
+    $(document).on('click', '.pagination a', function(event) {
+      event.preventDefault();
+      var page = $(this).attr('href').split('page=')[1]; // Get page number from URL
+      refreshTable(page);
+    });
+
+  $(document).ready(function() {
+    refreshTable();
+  });
+
+  
+  // Modal Edit
+$('.table-data-feature').on('click', '.item', function() {
+  var targetModalId = $(this).data('target');
+  $(targetModalId).modal('show');
+});
 
 $(document).ready(function () {
   $('#addTask').submit(function (e) {
@@ -94,10 +151,13 @@ $(document).ready(function () {
                 alert('Data Berhasil Ditambahkan');
 
                 // Optionally, you can close the modal or perform other actions.
-                $('#taskModal').modal('hide');
+                $('#TaskModal').modal('hide');
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
+
+                refreshTable();
             }
               // Update the table (Assuming you have a function to update the table)
-              reloadProjects();
           },
           error: function (xhr) {
               console.error(xhr.responseText);
