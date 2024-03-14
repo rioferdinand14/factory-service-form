@@ -527,8 +527,7 @@
                                                             <i class="zmdi zmdi-delete"></i>
                                                         </button>                                            
                                                     </div>
-                                                </td>
-                                                
+                                                </td>                                                
                                                 @endforeach
                                             </tr>
                                         </tbody>                                        

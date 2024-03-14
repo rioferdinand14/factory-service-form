@@ -96,9 +96,8 @@ function refreshTable(page) {
                 row += '</div></td></tr>';
                 $('#dataTable tbody').append(row);
               });
-             $('#pagination').html(response.links);
-             $('.pagination a[href="?page=' + currentPage + '"]').parent().addClass('active'); // Add active class to current page link
-             $('.pagination li').removeClass('active'); // Remove active class from all pagination items
+             $('.pagination').html(response.links);
+             
           },
           error: function(xhr, status, error) {
             console.error('Error refreshing table:', error);
