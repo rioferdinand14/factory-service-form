@@ -123,8 +123,18 @@ class HomeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($projectId)
     {
-        //
+        try {
+            // Find the project by ID and delete it
+            $project = Project::findOrFail($projectId);
+            $project->delete();
+            
+            // Return a success response
+            return response()->json(['message' => 'Project deleted successfully']);
+        } catch (\Exception $e) {
+            // Handle any errors and return an error response
+            return response()->json(['error' => 'Failed to delete project'], 500);
+        }
     }
 }

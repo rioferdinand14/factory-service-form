@@ -92,7 +92,7 @@ function refreshTable(page) {
                 row += '<td>' + item.eta_project + '</td>';
                 row += '<td><div class="table-data-feature" id="editContainer">';
                 row += '<button type="button" class="item edit-button" data-toggle="modal" data-target="#editModal" data-id="'+ item.id +'" data-placement="top" title="Edit"><i class="zmdi zmdi-edit"></i></button>';
-                row += '<button class="item" data-toggle="tooltip" data-placement="top" title="Delete"><i class="zmdi zmdi-delete"></i></button>';
+                row += '<button type="button" class="item delete-button" data-id="'+ item.id +'" data-placement="top" title="Delete"><i class="zmdi zmdi-delete"></i></button>';
                 row += '</div></td></tr>';
                 $('#dataTable tbody').append(row);
               });
@@ -210,12 +210,12 @@ $(document).on('submit', '#editTask', function(event) {
   // Get the project ID from the data attribute of the modal
   var projectId = $('#editModal').data('projectId');
   // console.log("this is = " + projectId);
-  
+
   // Serialize form data
   var formData = $(this).serialize();
 
   // Retrieve CSRF token from the appropriate <meta> tag
-  var csrfToken = $('meta[name="edit-csrf-token"]').attr('content');
+  var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
   // Submit form data via AJAX
   $.ajax({
@@ -248,7 +248,32 @@ $(document).on('submit', '#editTask', function(event) {
   });
 });
 
+$(document).on('click', '.delete-button', function () {
+    var projectId = $(this).data('id');
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
+
+    $.ajax({
+      url: '/delete-project/' + projectId,
+      method: 'DELETE',
+      headers: {
+        'X-CSRF-TOKEN': csrfToken
+      },
+      success: function(response) {
+          // Handle success response
+          console.log('Project deleted successfully:', projectId);
+          alert('Project berhasil dihapus');
+
+          refreshTable();
+          // Optionally, refresh the table or update UI
+      },
+      error: function(xhr, status, error) {
+          // Handle error response
+          console.error('Error deleting project:', error);
+          // Optionally, display an error message to the user
+      }
+  });
+});
 
 (function ($) {
   // USE STRICT

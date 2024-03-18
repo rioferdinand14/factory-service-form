@@ -9,7 +9,6 @@
     <meta name="author" content="Hau Nguyen">
     <meta name="keywords" content="au theme template">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="edit-csrf-token" content="{{ csrf_token() }}">
 
     <!-- Title Page--> 
     <title>Tables</title>
@@ -456,7 +455,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <!-- DATA TABLE -->
-                                <h3 class="title-5 m-b-35">Data Project FS</h3>
+                                <h3 class="title-5 m-b-35">Data Project Factory Service</h3>
                                 
                                 <div class="tables-header">
                                     <div class="tables-header-item">
@@ -521,10 +520,10 @@
                                                 </td>
                                                 <td>
                                                     <div class="table-data-feature" id="editContainer">                                                        
-                                                        <button type="button" class="item" data-toggle="modal" data-target="#editModal{{ $item->id }}" data-placement="top" title="Edit">
+                                                        <button type="button" class="item edit-button" data-toggle="modal" data-target="#editModal" data-placement="top" title="Edit">
                                                             <i class="zmdi zmdi-edit"></i>
                                                         </button>                                                        
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                        <button class="item delete-button" data-toggle="tooltip" data-placement="top" title="Delete">
                                                             <i class="zmdi zmdi-delete"></i>
                                                         </button>                                            
                                                     </div>

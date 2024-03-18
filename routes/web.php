@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
+use PhpOffice\PhpSpreadsheet\Shared\OLE\PPS\Root;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,5 +27,6 @@ Route::middleware(['auth'])->group(function(){
 
     Route::get('/get-project-data/{projectId}', [HomeController::class, 'getProjectData'])->name('get-project-data');
     Route::put('/update-project/{projectId}', [HomeController::class, 'updateProject'])->name('update-data');
+    Route::delete('/delete-project/{projectId}', [HomeController::class, 'destroy'])->name('delete-project');
 
 });
