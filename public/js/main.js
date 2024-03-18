@@ -17,59 +17,6 @@
 
 
 
-    //Function to fetch and update data
-    function reloadProjects() {
-    // Make an AJAX request to get the latest project data from the server
-    $.ajax({
-        url: '/get-latest-projects', // Adjust the route based on your Laravel setup
-        method: 'GET',
-        dataType: 'json',
-        success: function (data) {
-            // Update HTML with new data
-            var tbody = $('.table-responsive-data2 tbody');
-            tbody.empty(); // Clear existing data
-
-            // Loop through projects and append to the tbody
-            $.each(data, function (_index, project) {
-                // Adjust the HTML structure based on your project data
-                var rowHtml = `
-                    <tr class="tr">
-                        <td >${project.input_date}</td>
-                        <td >${project.nama_project}</td>
-                        <td class="desc">${project.requestor}</td>
-                        <td >${project.category_project}</td>
-                        <td >
-                        <span>${project.description_project}</span>
-                        </td>
-                        <td >${project.status}</td>
-                        <td ><span class="status--process">${project.pic_project}</span></td>
-                        <td >${project.eta_project}</td>
-                        <td>
-                            <div class="table-data-feature">                                
-                                <button type="button" class="item" data-toggle="modal" data-target="#editModal${project.id}" data-placement="top" title="Edit">
-                                    <i class="zmdi zmdi-edit"></i>
-                                </button>
-                                <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
-                                    <i class="zmdi zmdi-delete"></i>
-                                </button>                                
-                            </div>
-                        </td>
-                    </tr>
-                `;
-
-                tbody.append(rowHtml);
-            });
-        },
-        error: function (error) {
-            console.error('Error fetching data:', error);
-        }
-    });
-}
-
-// Call the function on page load or based on some trigger
-$(document).ready(function () {
-    reloadProjects();
-});
 
 // Function to refresh table data
 function refreshTable(page) {
@@ -252,27 +199,28 @@ $(document).on('click', '.delete-button', function () {
     var projectId = $(this).data('id');
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-
-    $.ajax({
-      url: '/delete-project/' + projectId,
-      method: 'DELETE',
-      headers: {
-        'X-CSRF-TOKEN': csrfToken
-      },
-      success: function(response) {
-          // Handle success response
-          console.log('Project deleted successfully:', projectId);
-          alert('Project berhasil dihapus');
-
-          refreshTable();
-          // Optionally, refresh the table or update UI
-      },
-      error: function(xhr, status, error) {
-          // Handle error response
-          console.error('Error deleting project:', error);
-          // Optionally, display an error message to the user
-      }
-  });
+    if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {      
+      $.ajax({
+        url: '/delete-project/' + projectId,
+        method: 'DELETE',
+        headers: {
+          'X-CSRF-TOKEN': csrfToken
+        },
+        success: function(response) {
+            // Handle success response
+            console.log('Project deleted successfully:', projectId);
+            alert('Project berhasil dihapus');
+  
+            refreshTable();
+            // Optionally, refresh the table or update UI
+        },
+        error: function(xhr, status, error) {
+            // Handle error response
+            console.error('Error deleting project:', error);
+            // Optionally, display an error message to the user
+        }
+      });
+    }
 });
 
 (function ($) {
