@@ -91,7 +91,7 @@ function refreshTable(page) {
                 row += '<td><span class="status--process">' + item.pic_project + '</span></td>';
                 row += '<td>' + item.eta_project + '</td>';
                 row += '<td><div class="table-data-feature" id="editContainer">';
-                row += '<button type="button" class="item" data-toggle="modal" data-target="#editModal' + item.id + '" data-placement="top" title="Edit"><i class="zmdi zmdi-edit"></i></button>';
+                row += '<button type="button" class="item edit-button" data-toggle="modal" data-target="#editModal" data-id="'+ item.id +'" data-placement="top" title="Edit"><i class="zmdi zmdi-edit"></i></button>';
                 row += '<button class="item" data-toggle="tooltip" data-placement="top" title="Delete"><i class="zmdi zmdi-delete"></i></button>';
                 row += '</div></td></tr>';
                 $('#dataTable tbody').append(row);
@@ -112,6 +112,7 @@ function refreshTable(page) {
         refreshTable(1);
     });
     
+    
     $(document).on('click', '.pagination a', function(event) {
       event.preventDefault();
       var page = $(this).attr('href').split('page=')[1]; // Get page number from URL
@@ -122,12 +123,7 @@ function refreshTable(page) {
     refreshTable();
   });
 
-  
-  // Modal Edit
-$('.table-data-feature').on('click', '.item', function() {
-  var targetModalId = $(this).data('target');
-  $(targetModalId).modal('show');
-});
+
 
 $(document).ready(function () {
   $('#addTask').submit(function (e) {
@@ -163,13 +159,96 @@ $(document).ready(function () {
           }
       });
   });
-
-  // function updateTable(data) {
-  //     // Add logic to dynamically update your table
-  //     // For example, append a new row to the table with the returned data
-  //     // You can use jQuery or vanilla JavaScript to manipulate the DOM
-  // }
 });
+
+$(document).on('click', '.edit-button', function() {
+  var projectId = $(this).data('id');
+  $('#editModal').data('projectId', projectId);
+
+  
+  // Fetch existing data of the selected project
+  $.ajax({
+      url: '/get-project-data/' + projectId,
+      method: 'GET',
+      success: function(response) {
+        // check projectId                                           ~ URL UNDEFINED ~
+        console.log("project id = " + projectId);
+          // Populate modal fields with existing data
+          $('#editModal input[name="project_id"]').val(response.id);
+          $('#editModal input[name="input_date"]').val(response.input_date);
+          $('#editModal input[name="eta_project"]').val(response.eta_project);
+          $('#editModal input[name="requestor"]').val(response.requestor);
+          $('#editModal input[name="pic_project"]').val(response.pic_project);
+          $('#editModal input[name="nama_project"]').val(response.nama_project);
+          $('#editModal input[name="category_project"]').val(response.category_project);
+          $('#editModal select[name="status"] option').each(function() {
+            // Compare the value of each option with the statusValue
+            if ($(this).val() == response.status) {
+                // If the value matches, set the selected attribute
+                $(this).prop('selected', true);
+            } else {
+                // If it doesn't match, make sure the option is not selected
+                $(this).prop('selected', false);
+            }
+        });
+          $('#editModal textarea[name="description_project"]').val(response.description_project);
+          // Repeat this for other fields or use appropriate jQuery selectors
+
+          // Show the modal
+          $('#editModal').modal('show');
+      },
+      error: function(xhr, status, error) {
+          console.error('Error fetching existing data for edit:', error);
+      }
+  });
+});
+
+$(document).on('submit', '#editTask', function(event) {
+  // Prevent the default form submission
+  event.preventDefault();
+
+  // Get the project ID from the data attribute of the modal
+  var projectId = $('#editModal').data('projectId');
+  // console.log("this is = " + projectId);
+  
+  // Serialize form data
+  var formData = $(this).serialize();
+
+  // Retrieve CSRF token from the appropriate <meta> tag
+  var csrfToken = $('meta[name="edit-csrf-token"]').attr('content');
+
+  // Submit form data via AJAX
+  $.ajax({
+      url: '/update-project/' + projectId,
+      method: 'PUT',
+      headers: {
+          'X-CSRF-TOKEN': csrfToken
+      },
+      data: formData,
+      success: function(response) {
+          // Handle success response
+          console.log('Project updated successfully:', projectId);
+
+          // Optionally, show success alert
+          alert('Project updated successfully');
+
+          // Hide the modal
+          $('#editModal').modal('hide');
+          
+          $('.modal-backdrop').remove();
+
+          // Call function to refresh table data if needed
+          refreshTable(); // You may need to adjust this
+      },
+      error: function(xhr, status, error) {
+          // Handle error response
+          console.error('Error updating project:', error);
+          // Optionally, display an error message to the user
+      }
+  });
+});
+
+
 
 (function ($) {
   // USE STRICT

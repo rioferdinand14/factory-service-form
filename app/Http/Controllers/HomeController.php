@@ -72,23 +72,53 @@ class HomeController extends Controller
     {
         //
     }
+    /**
+     * Fetch the project data for modal.
+     */
+    public function getProjectData($projectId)
+    {
+        // Fetch existing data of the project with the given ID
+        $project = Project::findOrFail($projectId);
+
+        // Return the project data as JSON response
+        return response()->json($project);
+    }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        $projects = Project::find($id);
-        return response()->json(['status' => 'sucess', 'data' => $projects]);
+        
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+
+    public function updateProject(Request $request)
     {
-        //
+        $projectId = $request->input('project_id');
+        $project = Project::findOrFail($projectId);
+
+        // Update project data
+        $project->input_date = $request->input('input_date');
+        $project->eta_project = $request->input('eta_project');
+        $project->requestor = $request->input('requestor');
+        $project->pic_project = $request->input('pic_project');
+        $project->nama_project = $request->input('nama_project');
+        $project->category_project = $request->input('category_project');
+        $project->status = $request->input('status');
+        $project->description_project = $request->input('description_project');
+        // Update other fields as needed
+
+        // Save the updated project
+        $project->save();
+
+        // Return a response (e.g., success message or updated project data)
+        return response()->json(['message' => 'Project updated successfully', 'project' => $project]);
     }
+
 
     /**
      * Remove the specified resource from storage.
