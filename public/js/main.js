@@ -19,56 +19,79 @@
 
 
 // Function to refresh table data
-function refreshTable(page) {
-      $.ajax({
-          url: '/get-latest-projects?page=' + page, // URL to fetch updated data
-          method: 'GET',
-          success: function(response) {
-              // Update table with new data
-              $('#dataTable tbody').html(' '); // Assuming data is HTML for the table body only
-              
-              $.each(response.data, function(index, item) {
-                var row = '<tr class="tr">';
-                row += '<td>' + item.input_date + '</td>';
-                row += '<td>' + item.nama_project + '</td>';
-                row += '<td class="desc">' + item.requestor + '</td>';
-                row += '<td>' + item.category_project + '</td>';
-                row += '<td><span>' + item.description_project + '</span></td>';
-                row += '<td>' + item.status + '</td>';
-                row += '<td><span class="status--process">' + item.pic_project + '</span></td>';
-                row += '<td>' + item.eta_project + '</td>';
-                row += '<td><div class="table-data-feature" id="editContainer">';
-                row += '<button type="button" class="item edit-button" data-toggle="modal" data-target="#editModal" data-id="'+ item.id +'" data-placement="top" title="Edit"><i class="zmdi zmdi-edit"></i></button>';
-                row += '<button type="button" class="item delete-button" data-id="'+ item.id +'" data-placement="top" title="Delete"><i class="zmdi zmdi-delete"></i></button>';
-                row += '</div></td></tr>';
-                $('#dataTable tbody').append(row);
-              });
-             $('.pagination').html(response.links);
-             
-          },
-          error: function(xhr, status, error) {
-            console.error('Error refreshing table:', error);
-          }
-        });
-  }
-
-  refreshTable(1);
-
-  // Reload table when the button is clicked
-    $('#reloadButton').click(function() {
-        refreshTable(1);
-    });
-    
-    
-    $(document).on('click', '.pagination a', function(event) {
-      event.preventDefault();
-      var page = $(this).attr('href').split('page=')[1]; // Get page number from URL
-      refreshTable(page);
-    });
-
-  $(document).ready(function() {
-    refreshTable();
+function refreshTable(page = 1) {
+  $.ajax({
+    url: '/get-latest-projects?page=' + page,
+    method: 'GET',
+    success: function(response) {
+      updateTable(response);
+    },
+    error: function(xhr, status, error) {
+      console.error('Error refreshing table:', error);
+    }
   });
+}
+
+// Function to update table with new data
+function updateTable(response) {
+  var tbody = $('.table-responsive-data2 table tbody');
+  tbody.empty();
+
+  $.each(response.data, function(index, item) {
+    var row = '<tr class="tr">';
+    row += '<td>' + item.input_date + '</td>';
+    row += '<td>' + item.nama_project + '</td>';
+    row += '<td class="desc">' + item.requestor + '</td>';
+    row += '<td>' + item.category_project + '</td>';
+    row += '<td><span>' + item.description_project + '</span></td>';
+    row += '<td>' + item.status + '</td>';
+    row += '<td><span class="status--process">' + item.pic_project + '</span></td>';
+    row += '<td>' + item.eta_project + '</td>';
+    row += '<td><div class="table-data-feature" id="editContainer">';
+    row += '<button type="button" class="item edit-button" data-toggle="modal" data-target="#editModal" data-id="' + item.id + '" data-placement="top" title="Edit"><i class="zmdi zmdi-edit"></i></button>';
+    row += '<button type="button" class="item delete-button" data-id="' + item.id + '" data-placement="top" title="Delete"><i class="zmdi zmdi-delete"></i></button>';
+    row += '</div></td></tr>';
+    tbody.append(row);
+  });
+  $('.pagination').html(response.links);
+}
+
+// Function to handle search input
+$(document).ready(function() {
+  $('#searchInput').on('input', function() {
+    var query = $(this).val();
+
+    if (query !== '') {
+      $.ajax({
+        url: '/search',
+        method: 'GET',
+        data: { query: query },
+        dataType: 'json',
+        success: function(data) {
+          updateTable(data);
+        },
+        error: function(error) {
+          console.error('Error fetching search results:', error);
+        }
+      });
+    } else {
+      refreshTable(); // Empty search query, refresh the table
+    }
+  });
+});
+
+// Load table data on page load
+$(document).ready(function() {
+  refreshTable();
+});
+
+// Handle pagination clicks
+$(document).on('click', '.pagination a', function(event) {
+  event.preventDefault();
+  var page = $(this).attr('href').split('page=')[1];
+  refreshTable(page);
+});
+
 
 
 
@@ -222,6 +245,8 @@ $(document).on('click', '.delete-button', function () {
       });
     }
 });
+
+
 
 (function ($) {
   // USE STRICT

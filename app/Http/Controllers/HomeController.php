@@ -137,4 +137,27 @@ class HomeController extends Controller
             return response()->json(['error' => 'Failed to delete project'], 500);
         }
     }
+
+    public function search(Request $request)
+    {
+        // Get the search query from the request
+        $query = $request->input('query');
+
+        // Perform the search query on the Project model
+        $projects = Project::where('nama_project', 'LIKE', "%$query%")
+                        ->orWhere('requestor', 'LIKE', "%$query%")
+                        ->orWhere('category_project', 'LIKE', "%$query%")
+                        ->orWhere('description_project', 'LIKE', "%$query%")
+                        ->orWhere('status', 'LIKE', "%$query%")
+                        ->orWhere('pic_project', 'LIKE', "%$query%")
+                        ->orWhere('eta_project', 'LIKE', "%$query%")
+                        ->orderBy('id', 'desc')
+                        ->paginate(5); // Adjust pagination limit as needed
+
+        // Return the search results
+        return response()->json([
+            'data' => $projects->items(), // Get the data items
+            'links' => $projects->links()->toHtml(), // Get pagination links as HTML
+        ]);
+    }
 }

@@ -28,5 +28,6 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/get-project-data/{projectId}', [HomeController::class, 'getProjectData'])->name('get-project-data');
     Route::put('/update-project/{projectId}', [HomeController::class, 'updateProject'])->name('update-data');
     Route::delete('/delete-project/{projectId}', [HomeController::class, 'destroy'])->name('delete-project');
+    Route::get('/search', [HomeController::class, 'search'])->name('search');
 
 });

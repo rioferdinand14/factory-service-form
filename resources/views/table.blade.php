@@ -472,7 +472,7 @@
                                             <input class="form-control" style="background: none; border: none; display: flex; align-items: center;" id="searchInput" type="text" placeholder="Search">
                                             <div class="input-group-append">
                                                 <span class="input-group-text" style="background: none; border: none; padding-left: 0; display: flex; align-items: center;">
-                                                    <i class="fa-solid fa-search" style="background: none;"></i>
+                                                    <button type="button"><i class="fa-solid fa-search" style="background: none;"></i></button>
                                                 </span>
                                             </div>
                                         </div>
