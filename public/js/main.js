@@ -19,6 +19,7 @@
 
 
 // Function to refresh table data
+// Function to refresh table data
 function refreshTable(page = 1) {
   $.ajax({
     url: '/get-latest-projects?page=' + page,
@@ -80,6 +81,9 @@ $(document).ready(function() {
   });
 });
 
+$('#reloadButton').click(function() {
+  refreshTable(1);
+});
 // Load table data on page load
 $(document).ready(function() {
   refreshTable();
@@ -233,7 +237,7 @@ $(document).on('click', '.delete-button', function () {
             // Handle success response
             console.log('Project deleted successfully:', projectId);
             alert('Project berhasil dihapus');
-  
+            
             refreshTable();
             // Optionally, refresh the table or update UI
         },

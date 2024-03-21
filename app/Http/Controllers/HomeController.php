@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Exports\ExportProject;
+use App\Exports\SortId;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class HomeController extends Controller
 {
@@ -28,14 +31,6 @@ class HomeController extends Controller
         ]);
     }
 
-    
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -82,14 +77,6 @@ class HomeController extends Controller
 
         // Return the project data as JSON response
         return response()->json($project);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        
     }
 
     /**
@@ -159,5 +146,11 @@ class HomeController extends Controller
             'data' => $projects->items(), // Get the data items
             'links' => $projects->links()->toHtml(), // Get pagination links as HTML
         ]);
+    }
+
+    
+    public function export()
+    {
+        return Excel::download(new SortId, 'project.xlsx');
     }
 }

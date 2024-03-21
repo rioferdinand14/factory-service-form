@@ -30,4 +30,6 @@ Route::middleware(['auth'])->group(function(){
     Route::delete('/delete-project/{projectId}', [HomeController::class, 'destroy'])->name('delete-project');
     Route::get('/search', [HomeController::class, 'search'])->name('search');
 
+
+    Route::get('/project-export', [HomeController::class, 'export'])->name('project-export');
 });
