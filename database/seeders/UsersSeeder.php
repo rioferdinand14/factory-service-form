@@ -19,5 +19,10 @@ class UsersSeeder extends Seeder
             'username' => 'babababa',
             'password' => Hash::make('password'), // Bcrypt hashing
         ]);
+        DB::table('users')->insert([
+            'username' => 'gojira',
+            'password' => Hash::make('gogogo'), // Bcrypt hashing
+            'email' => 'gojiraJapan@gmail.com'
+        ]);
     }
 }
