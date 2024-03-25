@@ -1228,9 +1228,22 @@ section {
     top: 51px;
 }
 
-@media (max-width: 991px) {
+@media (max-width: 576px) {
     .logo {
         text-align: center;
+        width: 40%;
+    }
+}
+@media (min-width: 576px) {
+    .logo {
+        text-align: center;
+        width: 20%;
+    }
+}
+@media (min-width: 991px) {
+    .logo {
+        text-align: center;
+        width: 100%;
     }
 }
 
@@ -1249,7 +1262,7 @@ section {
     -webkit-justify-content: space-between;
     -moz-box-pack: justify;
     -ms-flex-pack: justify;
-    justify-content: space-between;
+    justify-content: end;
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
@@ -1469,6 +1482,13 @@ section {
     transform-origin: right top;
     z-index: 3;
 }
+
+@media (max-width: 991px) {
+    .account-dropdown{
+        left: 0px;
+    }
+}
+
 
 .account-dropdown .info {
     padding: 25px;
@@ -4794,6 +4814,13 @@ td:nth-child(5) span{
 .update-column {
     max-width: 300px; /* Adjust as needed for the update column */
     text-align: left;
+}
+
+@media (max-width: 576px) {
+    a .export-text {
+        margin-right: 1px;
+        font-size: 15px;
+    }
 }
 
 .export-text{
