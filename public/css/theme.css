@@ -152,6 +152,13 @@ strong {
     font-weight: 700;
 }
 
+pre {
+    font-family: inherit; /* Use the same font family as the parent element */
+    font-size: inherit;   /* Use the same font size as the parent element */
+    margin: 0;            /* Remove any margin */
+    white-space: pre-wrap; /* Preserve line breaks */
+}
+
 /*-----------------------------------------------------*/
 /*                   ELEMENTS                          */
 /*-----------------------------------------------------*/
@@ -4562,7 +4569,7 @@ section {
 .table-data2.table tbody td {
     text-align: left;
     font-size: 14px;
-    color: #808080;
+    color: #000000;
     vertical-align: top;
     padding: 15px 15px 10px 15px;
     border: none;

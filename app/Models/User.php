@@ -12,16 +12,24 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $connection = 'cksql';
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
+        'name',
         'username',
         'password',
-        'email'
+        'email',
+        'type'
     ];
+
+    public function role()
+    {
+        return $this->belongsTo(TypeUser::class, 'type_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.

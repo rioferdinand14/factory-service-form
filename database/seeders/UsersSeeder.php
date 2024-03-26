@@ -15,14 +15,19 @@ class UsersSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('users')->insert([
-            'username' => 'babababa',
-            'password' => Hash::make('password'), // Bcrypt hashing
+        DB::connection('cksql')->table('users')->insert([
+            'name' => 'Rio Ferdinand',
+            'username' => 'ferdinand',
+            'password' => Hash::make('password'), 
+            'email' => 'rio@gmail.com',
+            'type' => '2' // Bcrypt hashing
         ]);
-        DB::table('users')->insert([
-            'username' => 'gojira',
-            'password' => Hash::make('gogogo'), // Bcrypt hashing
-            'email' => 'gojiraJapan@gmail.com'
+        DB::connection('cksql')->table('users')->insert([
+            'name' => 'Thom Yorke',
+            'username' => 'radiohead',
+            'password' => Hash::make('gkaget'), // Bcrypt hashing
+            'email' => 'radio@gmail.com',
+            'type' => '3'
         ]);
     }
 }

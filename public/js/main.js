@@ -16,6 +16,19 @@
 })(jQuery);
 
 
+  const textarea = document.getElementById('descript');
+
+    textarea.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Prevent the default behavior of adding a new line
+            const cursorPosition = textarea.selectionStart;
+            const textBeforeCursor = textarea.value.substring(0, cursorPosition);
+            const textAfterCursor = textarea.value.substring(cursorPosition);
+            textarea.value = textBeforeCursor + '\n' + textAfterCursor;
+            textarea.selectionStart = textarea.selectionEnd = cursorPosition + 1; // Move cursor to the new line
+        }
+    });
+
 
 
 // Function to refresh table data
@@ -44,7 +57,7 @@ function updateTable(response) {
     row += '<td>' + item.nama_project + '</td>';
     row += '<td class="desc">' + item.requestor + '</td>';
     row += '<td>' + item.category_project + '</td>';
-    row += '<td><span>' + item.description_project + '</span></td>';
+    row += '<td><pre>' + item.description_project + '</pre></td>';
     row += '<td>' + item.status + '</td>';
     row += '<td><span class="status--process">' + item.pic_project + '</span></td>';
     row += '<td>' + item.eta_project + '</td>';
@@ -81,12 +94,11 @@ $(document).ready(function() {
   });
 });
 
-$('#reloadButton').click(function() {
-  refreshTable(1);
-});
 // Load table data on page load
 $(document).ready(function() {
-  refreshTable();
+  $('#reloadButton').click(function() {
+    refreshTable(1);
+  });
 });
 
 // Handle pagination clicks
@@ -118,6 +130,8 @@ $(document).ready(function () {
               if (response.status === 'success') {
                 // Display a success dialog box
                 alert('Data Berhasil Ditambahkan');
+
+                $('#addTask')[0].reset();
 
                 // Optionally, you can close the modal or perform other actions.
                 $('#TaskModal').modal('hide');
@@ -204,7 +218,7 @@ $(document).on('submit', '#editTask', function(event) {
           console.log('Project updated successfully:', projectId);
 
           // Optionally, show success alert
-          alert('Project updated successfully');
+          alert('Project berhasil diperbarui');
 
           // Hide the modal
           $('#editModal').modal('hide');
@@ -236,7 +250,7 @@ $(document).on('click', '.delete-button', function () {
         success: function(response) {
             // Handle success response
             console.log('Project deleted successfully:', projectId);
-            alert('Project berhasil dihapus');
+            alert('Project dihapus');
             
             refreshTable();
             // Optionally, refresh the table or update UI

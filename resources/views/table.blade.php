@@ -127,7 +127,7 @@
                                                     <h5 class="name">
                                                         <a href="#">{{ Auth::user()->username }}</a>
                                                     </h5>                                                    
-                                                    <span class="email">{{ Auth::user()->email }}</span>
+                                                    <span class="email">{{ Auth::user()->role->name }}</span>
                                                 </div>
                                             </div>                                            
                                         @endif
@@ -189,18 +189,18 @@
                                 </div>
                                 
                                 <div class="table-responsive table-responsive-data2">
-                                    <table class="table table-data2" id="dataTable">
+                                    <table class="table table-data2 table-striped" id="dataTable">
                                         <thead class="text-center">
                                             <tr class="table-header">
-                                                <th >input date</th>
-                                                <th >project</th>
-                                                <th >requestor</th>
-                                                <th >Category</th>
-                                                <th >Update</th>
-                                                <th >status</th>
-                                                <th >pic</th>
-                                                <th >ETA</th>
-                                                <th ></th>
+                                                <th>input date</th>
+                                                <th>project</th>
+                                                <th>requestor</th>
+                                                <th>Category</th>
+                                                <th>Update</th>
+                                                <th>status</th>
+                                                <th>pic</th>
+                                                <th>ETA</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody class="text-center">
@@ -211,7 +211,7 @@
                                                 <td class="desc">{{ $item->requestor }}</td>
                                                 <td >{{ $item->category_project }}</td>
                                                 <td >
-                                                   <span>{{ $item->description_project }}</span>
+                                                   <pre>{{ $item->description_project }}</pre>
                                                 </td>
                                                 <td >{{ $item->status }}</td>
                                                 <td >
