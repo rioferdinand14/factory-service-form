@@ -170,7 +170,7 @@
                                     </div>
                                     <div class="search-container">
                                         <div class="input-group">
-                                            <input class="form-control" style="background: none; border: none; display: flex; align-items: center;" id="searchInput" type="text" placeholder="Search">
+                                            <input class="form-control" style="background: none; border: none; display: flex; align-items: center;" id="searchInput" type="text" placeholder="Search" autocomplete="on">
                                             <div class="input-group-append">
                                                 <span class="input-group-text" style="background: none; border: none; padding-left: 0; display: flex; align-items: center;">
                                                     <button type="button"><i class="fa-solid fa-search" style="background: none;"></i></button>
@@ -207,12 +207,12 @@
                                             @foreach ($projects as $item)                                                                                                                                            
                                             <tr class="tr">
                                                 <td >{{ $item->input_date }}</td>
-                                                <td >{{ $item->nama_project }}</td>
+                                                <td >{{ $item->nama_project }} 
+                                                    <p>Detail: {{ $item->detail }}</p>
+                                                </td>                                                
                                                 <td class="desc">{{ $item->requestor }}</td>
                                                 <td >{{ $item->category_project }}</td>
-                                                <td >
-                                                   <pre>{{ $item->description_project }}</pre>
-                                                </td>
+                                                <td>{!! nl2br(e($item->description_project)) !!}</td>
                                                 <td >{{ $item->status }}</td>
                                                 <td >
                                                     <span class="status--process">{{ $item->pic_project }}</span>
@@ -220,13 +220,15 @@
                                                 <td>{{ $item->eta_project }}
                                                 </td>
                                                 <td>
-                                                    <div class="table-data-feature" id="editContainer">                                                        
-                                                        <button type="button" class="item edit-button" data-toggle="modal" data-target="#editModal" data-placement="top" title="Edit">
-                                                            <i class="zmdi zmdi-edit"></i>
-                                                        </button>                                                        
-                                                        <button class="item delete-button" data-toggle="tooltip" data-placement="top" title="Delete">
-                                                            <i class="zmdi zmdi-delete"></i>
-                                                        </button>                                            
+                                                    <div class="table-data-feature" id="editContainer">
+                                                        @if ( Auth::user()->role->name === 'Administrator' )                                                            
+                                                            <button type="button" class="item edit-button" data-toggle="modal" data-id="{{ $item->id }}" data-target="#editModal" data-placement="top" title="Edit">
+                                                                <i class="zmdi zmdi-edit"></i>
+                                                            </button>                                                        
+                                                            <button class="item delete-button" data-toggle="tooltip" data-id="{{ $item->id }}" data-placement="top" title="Delete">
+                                                                <i class="zmdi zmdi-delete"></i>
+                                                            </button>                                            
+                                                        @endif                                                  
                                                     </div>
                                                 </td>                                                
                                                 @endforeach
@@ -257,19 +259,18 @@
                     <form id="addTask" action="{{ route('create-data') }}" method="POST" autocomplete="off">
                         @csrf
                         <div class="container-fluid">                        
-                            <div class="row">                                                                    
-                                <div class="col-sm-5 col-md-6">
+                            <div class="row">                                                           
+                                @if ( Auth::user()->role->name === 'Administrator' )
+                                <div class="col-sm-5 col-md-6">                                                                           
+                                    <input type="hidden" class="form-control datepicker" name="input_date" />
                                     <div class="mb-3">
-                                        <label for="date" class="align-items-start">Date:</label>
-                                        <div class="input-group date w-100" id="datepickerContainer">
-                                            <input type="text" class="form-control datepicker " id="datepicker" name="input_date" />
-                                            <span class="input-group-append">
-                                                <span class="input-group-text bg-light d-block">
-                                                    <i class="fa fa-calendar"></i>
-                                                </span>
-                                            </span>
-                                        </div>
-                                    </div>
+                                        <label for="project" class="align-items-start">Project:</label>
+                                        <input type="text" class="form-control w-100" name="nama_project">
+                                    </div>                                  
+                                    <div class="mb-3">
+                                        <label for="detail" class="align-items-start">Detail Project:</label>
+                                        <input type="text" class="form-control w-100" name="detail">
+                                    </div>                                  
                                     <div class="mb-3">
                                         <label for="eta" class="align-items-start">ETA:</label>
                                         <div class="input-group date w-100" id="datepickerContainer">
@@ -290,19 +291,20 @@
                                         <input type="text" class="form-control w-100" name="pic_project">
                                     </div>
                                 </div>
-                                <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
-                                    <div class="mb-3">
-                                        <label for="project" class="align-items-start">Project:</label>
-                                        <input type="text" class="form-control w-100" name="nama_project">
-                                    </div>
+                                <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">                                
                                     <div class="mb-3">
                                         <label for="category" class="align-items-start">Category:</label>
-                                        <input type="text" class="form-control w-100" name="category_project">
+                                        <select class="form-control w-100" id="category_project" name="category_project">
+                                            <option selected>Pilih Kategori</option>
+                                            <option value="Infrastructure">Infrastructure</option>
+                                            <option value="Maintenance">Maintenance</option>
+                                            <option value="Tool Store">Tool Store</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3" >                                        
                                         <label for="status">Status</label>                                                            
                                             <select class="form-control w-100" id="status" name="status">
-                                            <option selected>Select</option>
+                                            <option selected>Pilih</option>
                                             <option value="Open">Open</option>
                                             <option value="On Progress">On Progress</option>
                                             <option value="Done">Done</option>
@@ -313,6 +315,55 @@
                                         <textarea class="form-control w-100" style="border: 1px solid; border-color:rgb(223, 223, 223)" name="description_project" id="descript" cols="30" rows="10"></textarea>
                                     </div>                                                    
                                 </div>
+                                @elseif (Auth::user()->role->name === 'Operator')
+                                <div class="col-sm-5 col-md-6">                                                                           
+                                    <input type="hidden" class="form-control datepicker " id="datepicker" name="input_date" />
+                                    <div class="mb-3">
+                                        <label for="project" class="align-items-start">Project:</label>
+                                        <input type="text" class="form-control w-100" name="nama_project">
+                                    </div>                                  
+                                    <div class="mb-3">
+                                        <label for="detail" class="align-items-start">Detail Project:</label>
+                                        <input type="text" class="form-control w-100" name="detail">
+                                    </div>                                  
+                                    <div class="mb-3">
+                                        <label for="eta" class="align-items-start">ETA:</label>
+                                        <div class="input-group date w-100" id="datepickerContainer">
+                                            <input type="text" class="form-control datepicker" id="etapicker" name="eta_project"/>
+                                            <span class="input-group-append">
+                                                <span class="input-group-text bg-light d-block">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="requestor" class="align-items-start">Requestor:</label>
+                                        <input type="text" class="form-control w-100" name="requestor">
+                                    </div>                                    
+                                </div>
+                                <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">                                
+                                    <div class="mb-3">
+                                        <label for="category" class="align-items-start">Category:</label>
+                                        <select class="form-control w-100" id="status" name="status">
+                                            <option selected>Pilih Kategori</option>
+                                            <option value="Infrastructure">Infrastructure</option>
+                                            <option value="Maintenance">Maintenance</option>
+                                            <option value="Tool Store">Tool Store</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3" >                                        
+                                        <label for="status">Status</label>                                                            
+                                            <select class="form-control w-100" id="status" name="status">
+                                            <option selected>Select</option>
+                                            <option value="Open">Open</option>
+                                            <option value="On Progress">On Progress</option>
+                                            <option value="Done">Done</option>
+                                        </select>
+                                    </div>                                                                                        
+                                </div>
+                                @endif         
+                                
                             </div>
                         <div class="modal-footer">
                             <button type="submit" name="submit" class="btn btn-primary" >Submit</button>
@@ -344,7 +395,7 @@
                     <div class="container-fluid">                        
                         <div class="row">                                                                    
                             <div class="col-sm-5 col-md-6">
-                                <div class="mb-3">
+                                {{-- <div class="mb-3">
                                     <label for="date" class="align-items-start">Date:</label>
                                     <div class="input-group date w-100" id="datepickerContainer">
                                         <input type="text" class="form-control datepicker" id="datepicker" name="input_date"/>
@@ -354,7 +405,7 @@
                                             </span>
                                         </span>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="mb-3">
                                     <label for="eta" class="align-items-start">ETA:</label>
                                     <div class="input-group date w-100" id="datepickerContainer">

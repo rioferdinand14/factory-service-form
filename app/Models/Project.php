@@ -13,6 +13,7 @@ class Project extends Model
         'input_date',
         'eta_project',
         'nama_project',
+        'detail',
         'requestor',
         'category_project',
         'status',

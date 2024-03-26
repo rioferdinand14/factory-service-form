@@ -8,6 +8,7 @@ use App\Exports\SortId;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class HomeController extends Controller
 {
@@ -39,18 +40,18 @@ class HomeController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'input_date' => 'required|date_format:m/d/Y', // Adjust the date format based on your datepicker
             'eta_project' => 'required|date_format:m/d/Y', // Adjust the date format based on your datepicker
             'requestor' => 'required',
             'pic_project' => 'required',
             'nama_project' => 'required',
+            'detail' => 'required',
             'category_project' => 'required',
             'status' => 'required',
             'description_project' => 'required',
         ]);
 
+        $validatedData['input_date'] = now()->toDateString(); // Assuming 'input_date' is of type DATE
         // Format the dates using Carbon
-        $validatedData['input_date'] = Carbon::createFromFormat('m/d/Y', $validatedData['input_date']);
         $validatedData['eta_project'] = Carbon::createFromFormat('m/d/Y', $validatedData['eta_project']);
 
         // Create a new record in the database
@@ -72,11 +73,17 @@ class HomeController extends Controller
      */
     public function getProjectData($projectId)
     {
-        // Fetch existing data of the project with the given ID
-        $project = Project::findOrFail($projectId);
+        // Fetch the project data based on the provided projectId
+        $project = Project::find($projectId);
 
-        // Return the project data as JSON response
-        return response()->json($project);
+        // Check if the project exists
+        if ($project) {
+            // Return the project data as JSON response
+            return response()->json($project);
+        } else {
+            // Return a 404 response if the project does not exist
+            return response()->json(['error' => 'Project not found'], 404);
+        }
     }
 
     /**

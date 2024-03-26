@@ -13,25 +13,25 @@ class UserController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-{
-    if (Auth::check()) {
-        $user = Auth::user();
-        $typeId = $user->type_id;
-        
-        // Retrieve the role name from the type_user table based on the type_id
-        $typeUser = TypeUser::find($typeId);
+    {
+        if (Auth::check()) {
+            $user = Auth::user();
+            $typeId = $user->type_id;
+            
+            // Retrieve the role name from the type_user table based on the type_id
+            $typeUser = TypeUser::find($typeId);
 
-        // Check if the TypeUser with the given ID exists
-        if ($typeUser) {
-            $role = $typeUser->name;
-        } else {
-            // If the TypeUser doesn't exist, set role to a default value or handle it accordingly
-            $role = 'Unknown Role';
+            // Check if the TypeUser with the given ID exists
+            if ($typeUser) {
+                $role = $typeUser->name;
+            } else {
+                // If the TypeUser doesn't exist, set role to a default value or handle it accordingly
+                $role = 'Unknown Role';
+            }
+
+            return view('navbar', ['user' => $user, 'role' => $role]);
         }
-
-        return view('navbar', ['user' => $user, 'role' => $role]);
     }
-}
 
     /**
      * Show the form for creating a new resource.

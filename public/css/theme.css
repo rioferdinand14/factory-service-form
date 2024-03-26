@@ -4611,6 +4611,10 @@ td:nth-child(5) span{
     color: #4272d7;
 }
 
+.table-data2.table tr td p{
+    color: #6d6d6d;
+}
+
 .table-data2 .spacer {
     height: 5px;
     background: transparent;

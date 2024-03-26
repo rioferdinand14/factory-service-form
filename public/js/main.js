@@ -16,18 +16,18 @@
 })(jQuery);
 
 
-  const textarea = document.getElementById('descript');
+  // const textarea = document.getElementById('descript');
 
-    textarea.addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault(); // Prevent the default behavior of adding a new line
-            const cursorPosition = textarea.selectionStart;
-            const textBeforeCursor = textarea.value.substring(0, cursorPosition);
-            const textAfterCursor = textarea.value.substring(cursorPosition);
-            textarea.value = textBeforeCursor + '\n' + textAfterCursor;
-            textarea.selectionStart = textarea.selectionEnd = cursorPosition + 1; // Move cursor to the new line
-        }
-    });
+  //   textarea.addEventListener('keydown', function(event) {
+  //       if (event.key === 'Enter') {
+  //           event.preventDefault(); // Prevent the default behavior of adding a new line
+  //           const cursorPosition = textarea.selectionStart;
+  //           const textBeforeCursor = textarea.value.substring(0, cursorPosition);
+  //           const textAfterCursor = textarea.value.substring(cursorPosition);
+  //           textarea.value = textBeforeCursor + '\n' + textAfterCursor;
+  //           textarea.selectionStart = textarea.selectionEnd = cursorPosition + 1; // Move cursor to the new line
+  //       }
+  //   });
 
 
 
@@ -46,6 +46,10 @@ function refreshTable(page = 1) {
   });
 }
 
+function nl2brJS(str) {
+  return str.replace(/(?:\r\n|\r|\n)/g, '<br>');
+}
+
 // Function to update table with new data
 function updateTable(response) {
   var tbody = $('.table-responsive-data2 table tbody');
@@ -54,10 +58,10 @@ function updateTable(response) {
   $.each(response.data, function(index, item) {
     var row = '<tr class="tr">';
     row += '<td>' + item.input_date + '</td>';
-    row += '<td>' + item.nama_project + '</td>';
+    row += '<td>' + item.nama_project + '<p>Detail: ' + item.detail + '</p></td>';
     row += '<td class="desc">' + item.requestor + '</td>';
     row += '<td>' + item.category_project + '</td>';
-    row += '<td><pre>' + item.description_project + '</pre></td>';
+    row += '<td>' + nl2brJS(item.description_project) + '</td>';
     row += '<td>' + item.status + '</td>';
     row += '<td><span class="status--process">' + item.pic_project + '</span></td>';
     row += '<td>' + item.eta_project + '</td>';
@@ -151,6 +155,7 @@ $(document).ready(function () {
 
 $(document).on('click', '.edit-button', function() {
   var projectId = $(this).data('id');
+  console.log(projectId);
   $('#editModal').data('projectId', projectId);
 
   
@@ -163,7 +168,6 @@ $(document).on('click', '.edit-button', function() {
         console.log("project id = " + projectId);
           // Populate modal fields with existing data
           $('#editModal input[name="project_id"]').val(response.id);
-          $('#editModal input[name="input_date"]').val(response.input_date);
           $('#editModal input[name="eta_project"]').val(response.eta_project);
           $('#editModal input[name="requestor"]').val(response.requestor);
           $('#editModal input[name="pic_project"]').val(response.pic_project);
