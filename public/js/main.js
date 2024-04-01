@@ -53,7 +53,7 @@ function refreshTable(page = 1) {
 // Function to update table with new data
 function updateTable(response) {
   var role = $('#UserRole').data('role');
-  var tbody = $('.table-responsive-data2 table tbody');
+  var tbody = $('.table-responsive-data2 table tbody');  
   tbody.empty();
   
 
@@ -63,10 +63,10 @@ function updateTable(response) {
     row += '<td>' + item.nama_project + '<p>Detail: ' + item.detail + '</p></td>';
     row += '<td class="desc">' + item.requestor;
     if (item.photos_img) {
-      row += '<a href="' + item.photos + '">View Image</a>';
+      row += '<a href="' + baseUrl + '/' + item.photos_img + '">View Image</a>';
   } else {
       row += '<p>No Image</p>';
-  }  
+  }
     row += '</td>';
     row += '<td>' + item.category_project + '</td>';
     row += '<td>' + nl2brJS(item.description_project) + '</td>';
@@ -75,11 +75,9 @@ function updateTable(response) {
     row += '<td>' + item.eta_project + '</td>';
     row += '<td><div class="table-data-feature" id="editContainer">';
     if (role === 'Administrator') {      
-      row += '<button type="button" class="item edit-button" data-toggle="modal" data-target="#editModal" data-id="' + item.id + '" data-placement="top" title="Edit"><i class="zmdi zmdi-edit"></i></button>';
-      row += '<button type="button" class="item delete-button" data-id="' + item.id + '" data-placement="top" title="Delete"><i class="zmdi zmdi-delete"></i></button>';
+        row += '<button type="button" class="item edit-button" data-toggle="modal" data-target="#editModal" data-id="' + item.id + '" data-placement="top" title="Edit"><i class="zmdi zmdi-edit"></i></button>';
+        row += '<button type="button" class="item delete-button" data-id="' + item.id + '" data-placement="top" title="Delete"><i class="zmdi zmdi-delete"></i></button>';
     }
-  
-
     row += '</div></td></tr>';
     tbody.append(row);
   });

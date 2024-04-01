@@ -208,7 +208,12 @@
                                                     <p>Detail: {{ $item->detail }}</p>
                                                 </td>                                                
                                                 <td class="desc">{{ $item->requestor }}
-                                                    <img src="{{ asset($item->photo) }}" alt="uploaded image" width="50" height="50">
+                                                    @if($item->photos_img)
+                                                        <a href="{{ asset('storage/images/' . $item->photos_img) }}" alt="uploaded image" style="text-decoration: none" target="_blank">View Image</a>
+                                                    @else
+                                                        <p>No image</p>
+                                                    @endif
+
                                                 </td>
                                                 <td >{{ $item->category_project }}</td>
                                                 <td>{!! nl2br(e($item->description_project)) !!}</td>
@@ -494,6 +499,9 @@
         });
     </script>
 
+    <script>
+        var baseUrl = "{{ asset('storage/images/') }}";
+    </script>
 
     
 
