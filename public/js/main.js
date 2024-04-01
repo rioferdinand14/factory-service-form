@@ -62,8 +62,8 @@ function updateTable(response) {
     row += '<td>' + item.input_date + '</td>';
     row += '<td>' + item.nama_project + '<p>Detail: ' + item.detail + '</p></td>';
     row += '<td class="desc">' + item.requestor;
-    if (item.image) {
-      row += '<p><a href="' + item.image_url + '">View Image</a></p>';
+    if (item.photos_img) {
+      row += '<a href="' + item.photos + '">View Image</a>';
   } else {
       row += '<p>No Image</p>';
   }  
@@ -131,31 +131,38 @@ $(document).ready(function () {
   $('#addTask').submit(function (e) {
       e.preventDefault();
 
+      // Create a new FormData object
+      var formData = new FormData(this);
+
+      // Add CSRF token manually
       var csrfToken = $('meta[name="csrf-token"]').attr('content');
-    
+      formData.append('_token', csrfToken); // Append CSRF token to FormData
+
       // Use AJAX to submit the form
       $.ajax({
           url: '/create-data',
           method: 'POST',
           headers: {
-            'X-CSRF-TOKEN': csrfToken
+              'X-CSRF-TOKEN': csrfToken
           },
-          data: $(this).serialize(),
+          processData: false, // Prevent jQuery from processing the data
+          contentType: false, // Prevent jQuery from setting content type
+          data: formData,
           success: function (response) {
               // Close the modal
               if (response.status === 'success') {
-                // Display a success dialog box
-                alert('Data Berhasil Ditambahkan');
+                  // Display a success dialog box
+                  alert('Data Berhasil Ditambahkan');
 
-                $('#addTask')[0].reset();
+                  $('#addTask')[0].reset();
 
-                // Optionally, you can close the modal or perform other actions.
-                $('#TaskModal').modal('hide');
-                $('body').removeClass('modal-open');
-                $('.modal-backdrop').remove();
+                  // Optionally, you can close the modal or perform other actions.
+                  $('#TaskModal').modal('hide');
+                  $('body').removeClass('modal-open');
+                  $('.modal-backdrop').remove();
 
-                refreshTable();
-            }
+                  refreshTable();
+              }
               // Update the table (Assuming you have a function to update the table)
           },
           error: function (xhr) {
@@ -164,6 +171,7 @@ $(document).ready(function () {
       });
   });
 });
+
 
 $(document).on('click', '.edit-button', function() {
   var projectId = $(this).data('id');

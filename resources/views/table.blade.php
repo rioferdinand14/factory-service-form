@@ -255,7 +255,7 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                    <form id="addTask" action="{{ route('create-data') }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+                    <form id="addTask" method="POST" autocomplete="off" enctype="multipart/form-data">
                         @csrf
                         <div class="container-fluid">                        
                             <div class="row">                                                           
@@ -286,8 +286,8 @@
                                             <input type="text" class="form-control w-100" name="requestor">
                                         </div>
                                         <div class="mb-3">
-                                            <label for="image">Image: </label>
-                                            <input type="file" name="photos_img" id="image">
+                                            <label for="pic" class="align-items-start">PIC:</label>
+                                            <input type="text" class="form-control w-100" name="pic_project">
                                         </div>
                                     </div>
                                     <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">                                

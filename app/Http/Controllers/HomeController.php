@@ -41,7 +41,7 @@ class HomeController extends Controller
      public function store(Request $request)
      {
 
-        dd($file);
+        // dd($request);
          $validatedData = $request->validate([
              'eta_project' => 'required|date_format:m/d/Y',
              'requestor' => 'required',
@@ -51,7 +51,7 @@ class HomeController extends Controller
              'category_project' => 'required',
              'status' => 'nullable',
              'description_project' => 'nullable',
-             'photos_img' => 'image|mimes:jpeg,png,jpg,gif|max:2048|required'
+             'photos_img' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240'
          ]);
      
          $validatedData['input_date'] = now()->toDateString(); // Assuming 'input_date' is of type DATE
