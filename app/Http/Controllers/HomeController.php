@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Contracts\Service\Attribute\Required;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -37,28 +38,45 @@ class HomeController extends Controller
      * Store a newly created resource in storage.
      */
 
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'eta_project' => 'required|date_format:m/d/Y', // Adjust the date format based on your datepicker
-            'requestor' => 'required',
-            'pic_project' => 'required',
-            'nama_project' => 'required',
-            'detail' => 'required',
-            'category_project' => 'required',
-            'status' => 'required',
-            'description_project' => 'required',
-        ]);
+     public function store(Request $request)
+     {
 
-        $validatedData['input_date'] = now()->toDateString(); // Assuming 'input_date' is of type DATE
-        // Format the dates using Carbon
-        $validatedData['eta_project'] = Carbon::createFromFormat('m/d/Y', $validatedData['eta_project']);
-
-        // Create a new record in the database
-        $model = Project::create($validatedData);
-
-        return response()->json(['status' => 'success', 'data' => $model]);
-    }
+        dd($file);
+         $validatedData = $request->validate([
+             'eta_project' => 'required|date_format:m/d/Y',
+             'requestor' => 'required',
+             'pic_project' => 'nullable',
+             'nama_project' => 'required',
+             'detail' => 'required',
+             'category_project' => 'required',
+             'status' => 'nullable',
+             'description_project' => 'nullable',
+             'photos_img' => 'image|mimes:jpeg,png,jpg,gif|max:2048|required'
+         ]);
+     
+         $validatedData['input_date'] = now()->toDateString(); // Assuming 'input_date' is of type DATE
+         // Format the dates using Carbon
+         $validatedData['eta_project'] = Carbon::createFromFormat('m/d/Y', $validatedData['eta_project']);
+     
+         $imageName = 'none'; // Initialize imageName with null
+     
+         if ($request->hasFile('photos_img')) 
+            {
+                // Get the file from the request
+                $image = $request->file('photos_img');
+                // Generate a unique name for the image file
+                $imageName = time().'.'.$image->getClientOriginalExtension();
+                // Store the image file in the specified directory
+                $image->storeAs('images', $imageName, 'public'); // Store the image in the public/images directory
+                $validatedData['photos_img'] = $imageName; // Assign imageName to 'image' field
+            }
+        
+         // Create a new record in the database
+         $model = Project::create($validatedData);
+     
+         return response()->json(['status' => 'success', 'data' => $model]);
+     }
+     
 
 
     /**

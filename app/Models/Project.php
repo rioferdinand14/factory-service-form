@@ -19,6 +19,7 @@ class Project extends Model
         'status',
         'pic_project',
         'description_project',
+        'photos_img'
         
     ];
 

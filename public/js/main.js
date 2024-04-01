@@ -29,9 +29,14 @@
   //       }
   //   });
 
+  function nl2brJS(str) {
+    // Check if the input string is null or undefined
+    if (str == null) {
+      return ''; // Return an empty string if null or undefined
+    }
+    return str.replace(/(?:\r\n|\r|\n)/g, '<br>');
+  }
 
-
-// Function to refresh table data
 // Function to refresh table data
 function refreshTable(page = 1) {
   $.ajax({
@@ -45,29 +50,36 @@ function refreshTable(page = 1) {
     }
   });
 }
-
-function nl2brJS(str) {
-  return str.replace(/(?:\r\n|\r|\n)/g, '<br>');
-}
-
 // Function to update table with new data
 function updateTable(response) {
+  var role = $('#UserRole').data('role');
   var tbody = $('.table-responsive-data2 table tbody');
   tbody.empty();
+  
 
   $.each(response.data, function(index, item) {
     var row = '<tr class="tr">';
     row += '<td>' + item.input_date + '</td>';
     row += '<td>' + item.nama_project + '<p>Detail: ' + item.detail + '</p></td>';
-    row += '<td class="desc">' + item.requestor + '</td>';
+    row += '<td class="desc">' + item.requestor;
+    if (item.image) {
+      row += '<p><a href="' + item.image_url + '">View Image</a></p>';
+  } else {
+      row += '<p>No Image</p>';
+  }  
+    row += '</td>';
     row += '<td>' + item.category_project + '</td>';
     row += '<td>' + nl2brJS(item.description_project) + '</td>';
     row += '<td>' + item.status + '</td>';
-    row += '<td><span class="status--process">' + item.pic_project + '</span></td>';
+    row += '<td><span class="status--process">' + (item.pic_project !== null ? item.pic_project : '') + '</span></td>';
     row += '<td>' + item.eta_project + '</td>';
     row += '<td><div class="table-data-feature" id="editContainer">';
-    row += '<button type="button" class="item edit-button" data-toggle="modal" data-target="#editModal" data-id="' + item.id + '" data-placement="top" title="Edit"><i class="zmdi zmdi-edit"></i></button>';
-    row += '<button type="button" class="item delete-button" data-id="' + item.id + '" data-placement="top" title="Delete"><i class="zmdi zmdi-delete"></i></button>';
+    if (role === 'Administrator') {      
+      row += '<button type="button" class="item edit-button" data-toggle="modal" data-target="#editModal" data-id="' + item.id + '" data-placement="top" title="Edit"><i class="zmdi zmdi-edit"></i></button>';
+      row += '<button type="button" class="item delete-button" data-id="' + item.id + '" data-placement="top" title="Delete"><i class="zmdi zmdi-delete"></i></button>';
+    }
+  
+
     row += '</div></td></tr>';
     tbody.append(row);
   });

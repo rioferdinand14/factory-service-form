@@ -9,20 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::table('projects', function (Blueprint $table) {
-            $table->string('description_project')->nullable();
+            $table->string('pic_project')->nullable()->change();
+            $table->string('status')->nullable()->change();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
+        // If you want to rollback the changes, you can define the "down" method
         Schema::table('projects', function (Blueprint $table) {
-            $table->dropColumn('description_project');
+            $table->string('pic_project')->change();
+            $table->string('status')->change();
         });
     }
 };
