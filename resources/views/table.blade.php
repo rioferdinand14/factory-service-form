@@ -207,13 +207,12 @@
                                                 <td >{{ $item->nama_project }} 
                                                     <p>Detail: {{ $item->detail }}</p>
                                                 </td>                                                
-                                                <td class="desc">{{ $item->requestor }}
+                                                <td class="desc">{{ $item->requestor }} 
                                                     @if($item->photos_img)
-                                                        <a href="{{ asset('storage/images/' . $item->photos_img) }}" alt="uploaded image" style="text-decoration: none" target="_blank">View Image</a>
+                                                        <a href="{{ asset('storage/images/' . $item->photos_img) }}" alt="uploaded image" style="text-decoration: none; color:black" target="_blank">View Image</a>
                                                     @else
-                                                        <p>No image</p>
+                                                        <p style="cursor: not-allowed">No image</p>
                                                     @endif
-
                                                 </td>
                                                 <td >{{ $item->category_project }}</td>
                                                 <td>{!! nl2br(e($item->description_project)) !!}</td>

@@ -63,9 +63,9 @@ function updateTable(response) {
     row += '<td>' + item.nama_project + '<p>Detail: ' + item.detail + '</p></td>';
     row += '<td class="desc">' + item.requestor;
     if (item.photos_img) {
-      row += '<a href="' + baseUrl + '/' + item.photos_img + '">View Image</a>';
+      row += '<a href="' + baseUrl + '/' + item.photos_img + '" style="text-decoration: none; color:black" targer="_blank" alt="Uploaded Image">View Image</a>';
   } else {
-      row += '<p>No Image</p>';
+      row += '<p style="cursor: not-allowed">No Image</p>';
   }
     row += '</td>';
     row += '<td>' + item.category_project + '</td>';
