@@ -11,7 +11,10 @@ class TypeUser extends Model
     protected $connection = 'cksql';
     protected $table = 'type_user';
 
-    
+    protected $fillable = [
+        'name'
+    ];
+
     public function users()
     {
         return $this->hasMany(User::class, 'type_id');

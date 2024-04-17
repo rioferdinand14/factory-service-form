@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\HistoryController;
 use PhpOffice\PhpSpreadsheet\Shared\OLE\PPS\Root;
 
 /*
@@ -21,15 +22,22 @@ Route::post('actionlogin', [LoginController::class, 'actionlogin'])->name('actio
 
 Route::middleware(['auth'])->group(function(){
     Route::get('table', [HomeController::class, 'index'])->name('table');
+
+    Route::get('histor', [HistoryController::class, 'index'])->middleware('admin')->name('histor');
+    Route::put('/projects/{id}/restore', [HistoryController::class, 'restoreProject'])->name('projects.restore');
+    Route::delete('projects/permanent-delete/{id}', [HistoryController::class, 'permanentDelete'])->name('projects.permanent-delete');
+
+
     Route::get('actionlogout', [LoginController::class, 'actionlogout'])->name('actionlogout');
+
     Route::get('/get-latest-projects', [HomeController::class, 'getLatestProjects']);
     Route::post('/create-data', [HomeController::class, 'store'])->name('create-data');
 
     Route::get('/get-project-data/{projectId}', [HomeController::class, 'getProjectData'])->name('get-project-data');
     Route::put('/update-project/{projectId}', [HomeController::class, 'updateProject'])->name('update-data');
+
     Route::delete('/delete-project/{projectId}', [HomeController::class, 'destroy'])->name('delete-project');
+
     Route::get('/search', [HomeController::class, 'search'])->name('search');
-
-
     Route::get('/project-export', [HomeController::class, 'export'])->name('project-export');
 });

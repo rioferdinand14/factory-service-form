@@ -30,6 +30,16 @@ class User extends Authenticatable
     {
         return $this->belongsTo(TypeUser::class, 'type_id');
     }
+                                   
+    /**
+     * Check if the user is an administrator.
+     *
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return $this->role->name === 'Administrator'; // Assuming 'name' is the column containing role names in the 'type_user' table
+    }
 
     /**
      * The attributes that should be hidden for serialization.
