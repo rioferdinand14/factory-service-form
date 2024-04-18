@@ -15,20 +15,6 @@
 
 })(jQuery);
 
-
-  // const textarea = document.getElementById('descript');
-
-  //   textarea.addEventListener('keydown', function(event) {
-  //       if (event.key === 'Enter') {
-  //           event.preventDefault(); // Prevent the default behavior of adding a new line
-  //           const cursorPosition = textarea.selectionStart;
-  //           const textBeforeCursor = textarea.value.substring(0, cursorPosition);
-  //           const textAfterCursor = textarea.value.substring(cursorPosition);
-  //           textarea.value = textBeforeCursor + '\n' + textAfterCursor;
-  //           textarea.selectionStart = textarea.selectionEnd = cursorPosition + 1; // Move cursor to the new line
-  //       }
-  //   });
-
   function nl2brJS(str) {
     // Check if the input string is null or undefined
     if (str == null) {
@@ -63,7 +49,7 @@ function updateTable(response) {
     row += '<td>' + item.nama_project + '<p>Detail: ' + item.detail + '</p></td>';
     row += '<td class="desc">' + item.requestor;
     if (item.photos_img) {
-      row += '<a href="' + baseUrl + '/' + item.photos_img + '" style="text-decoration: none; color:black" targer="_blank" alt="Uploaded Image">View Image</a>';
+      row += '<a href="' + baseUrl + '/' + item.photos_img + '" style="text-decoration: none; color:black" target="_blank" alt="Uploaded Image">View Image</a>';
   } else {
       row += '<p style="cursor: not-allowed">No Image</p>';
   }
@@ -76,7 +62,7 @@ function updateTable(response) {
     row += '<td><div class="table-data-feature" id="editContainer">';
     if (role === 'Administrator') {      
         row += '<button type="button" class="item edit-button" data-toggle="modal" data-target="#editModal" data-id="' + item.id + '" data-placement="top" title="Edit"><i class="zmdi zmdi-edit"></i></button>';
-        row += '<button type="button" class="item delete-button" data-id="' + item.id + '" data-placement="top" title="Delete"><i class="zmdi zmdi-delete"></i></button>';
+        row += '<button type="button" class="item delete-button-table" data-id="' + item.id + '" data-placement="top" title="Delete"><i class="zmdi zmdi-delete"></i></button>';
     }
     row += '</div></td></tr>';
     tbody.append(row);
@@ -116,7 +102,7 @@ $(document).ready(function() {
 });
 
 // Handle pagination clicks
-$(document).on('click', '.pagination a', function(event) {
+$(document).on('click', '#table-pagination .pagination a', function(event) {
   event.preventDefault();
   var page = $(this).attr('href').split('page=')[1];
   refreshTable(page);
@@ -124,7 +110,7 @@ $(document).on('click', '.pagination a', function(event) {
 
 
 
-
+// Function for modal too add data
 $(document).ready(function () {
   $('#addTask').submit(function (e) {
       e.preventDefault();
@@ -170,7 +156,7 @@ $(document).ready(function () {
   });
 });
 
-
+// Function to show modal with data
 $(document).on('click', '.edit-button', function() {
   var projectId = $(this).data('id');
   console.log(projectId);
@@ -182,12 +168,14 @@ $(document).on('click', '.edit-button', function() {
       url: '/get-project-data/' + projectId,
       method: 'GET',
       success: function(response) {
-        // check projectId                                           ~ URL UNDEFINED ~
+        // check projectId 
         console.log("project id = " + projectId);
           // Populate modal fields with existing data
-          $('#editModal input[name="project_id"]').val(response.id);
+          $('#editModal input[name="project_id"]').val(response.id);        
+          $('#editModal input[name="input_date"]').val(response.input_date);        
           $('#editModal input[name="eta_project"]').val(response.eta_project);
           $('#editModal input[name="requestor"]').val(response.requestor);
+          $('#editModal input[name="detail"]').val(response.detail);
           $('#editModal input[name="pic_project"]').val(response.pic_project);
           $('#editModal input[name="nama_project"]').val(response.nama_project);
           $('#editModal input[name="category_project"]').val(response.category_project);
@@ -213,7 +201,8 @@ $(document).on('click', '.edit-button', function() {
   });
 });
 
-$(document).on('submit', '#editTask', function(event) {
+// Function to submit edited data in Table page
+$(document).on('submit', '#editTaskTable', function(event) {
   // Prevent the default form submission
   event.preventDefault();
 
@@ -258,7 +247,54 @@ $(document).on('submit', '#editTask', function(event) {
   });
 });
 
-$(document).on('click', '.delete-button', function () {
+// Function to submit edited data in History Page
+$(document).on('submit', '#editTaskHistory', function(event) {
+  // Prevent the default form submission
+  event.preventDefault();
+
+  // Get the project ID from the data attribute of the modal
+  var projectId = $('#editModal').data('projectId');
+  // console.log("this is = " + projectId);
+
+  // Serialize form data
+  var formData = $(this).serialize();
+
+  // Retrieve CSRF token from the appropriate <meta> tag
+  var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+  // Submit form data via AJAX
+  $.ajax({
+      url: '/update-project/' + projectId,
+      method: 'PUT',
+      headers: {
+          'X-CSRF-TOKEN': csrfToken
+      },
+      data: formData,
+      success: function(response) {
+          // Handle success response
+          console.log('Project updated successfully:', projectId);
+
+          // Optionally, show success alert
+          alert('Project berhasil diperbarui');
+
+          // Hide the modal
+          $('#editModal').modal('hide');
+          
+          $('.modal-backdrop').remove();
+
+          // Call function to refresh table data if needed
+          location.reload();// You may need to adjust this
+      },
+      error: function(xhr, status, error) {
+          // Handle error response
+          console.error('Error updating project:', error);
+          // Optionally, display an error message to the user
+      }
+  });
+});
+
+// Function to soft delete data
+$(document).on('click', '.delete-button-table', function () {
     var projectId = $(this).data('id');
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
@@ -285,6 +321,34 @@ $(document).on('click', '.delete-button', function () {
       });
     }
 });
+
+
+// Function to permanently delete data
+$(document).on('click', '.permanent-delete-btn', function() {
+  var projectId = $(this).data('project-id');
+
+  if (confirm('Are you sure you want to permanently delete this project?')) {
+      $.ajax({
+          url: '/projects/permanent-delete/' + projectId,
+          type: 'DELETE',
+          method: 'DELETE',
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          success: function(response) {
+              // Handle success response, e.g., show a success message
+              alert('Project dihapus permanen');
+              location.reload();
+              // Optionally, refresh the page or update the table
+          },
+          error: function(xhr, status, error) {
+              // Handle error response, e.g., show an error message
+              alert('Error: ' + xhr.responseText);
+          }
+      });
+  }
+});
+
 
 
 

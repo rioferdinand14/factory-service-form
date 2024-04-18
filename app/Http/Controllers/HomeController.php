@@ -3,13 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
-use App\Exports\ExportProject;
 use App\Exports\SortId;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
-use Symfony\Contracts\Service\Attribute\Required;
-use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -18,15 +15,22 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $projects = Project::orderBy('id', 'desc')->paginate(5);
+        // Fetch only active projects (excluding those with status "Done")
+        $projects = Project::where('status', '!=', 'Done')
+                            ->orderBy('id', 'desc')
+                            ->paginate(5);
+        
+        // Pass the active projects to your view
         return view('table', compact('projects'));
-
     }
+
 
 
     public function getLatestProjects()
     {
-        $projects = Project::orderBy('id', 'desc')->latest()->paginate(5); // Adjust as needed
+        $projects = Project::where('status', '!=', 'Done')
+                            ->orderBy('id', 'desc')
+                            ->latest()->paginate(5); // Adjust as needed
         return response()->json([
             'data' => $projects->items(), // Get the data items
             'links' => $projects->links()->toHtml(), // Get pagination links as HTML
@@ -51,7 +55,7 @@ class HomeController extends Controller
              'category_project' => 'required',
              'status' => 'nullable',
              'description_project' => 'nullable',
-             'photos_img' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240'
+             'photos_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240'
          ]);
      
          $validatedData['input_date'] = now()->toDateString(); // Assuming 'input_date' is of type DATE
@@ -79,13 +83,6 @@ class HomeController extends Controller
      
 
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
     /**
      * Fetch the project data for modal.
      */
@@ -176,6 +173,7 @@ class HomeController extends Controller
     
     public function export()
     {
-        return Excel::download(new SortId, 'project.xlsx');
+        return Excel::download(new SortId, 'project-fs.xlsx');
     }
 }
+ 
