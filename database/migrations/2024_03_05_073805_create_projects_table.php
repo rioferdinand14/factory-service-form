@@ -16,8 +16,8 @@ return new class extends Migration
             $table->date('input_date');
             $table->string('nama_project');
             $table->string('requestor');
+            $table->string('detail');
             $table->string('category_project');
-            $table->string('description_project');
             $table->string('status');
             $table->string('pic_project');
             $table->date('eta_project');
