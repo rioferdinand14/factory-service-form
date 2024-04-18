@@ -62,7 +62,7 @@ function updateTable(response) {
     row += '<td><div class="table-data-feature" id="editContainer">';
     if (role === 'Administrator') {      
         row += '<button type="button" class="item edit-button" data-toggle="modal" data-target="#editModal" data-id="' + item.id + '" data-placement="top" title="Edit"><i class="zmdi zmdi-edit"></i></button>';
-        row += '<button type="button" class="item delete-button" data-id="' + item.id + '" data-placement="top" title="Delete"><i class="zmdi zmdi-delete"></i></button>';
+        row += '<button type="button" class="item delete-button-table" data-id="' + item.id + '" data-placement="top" title="Delete"><i class="zmdi zmdi-delete"></i></button>';
     }
     row += '</div></td></tr>';
     tbody.append(row);
@@ -102,7 +102,7 @@ $(document).ready(function() {
 });
 
 // Handle pagination clicks
-$(document).on('click', '#table-pagination a', function(event) {
+$(document).on('click', '#table-pagination .pagination a', function(event) {
   event.preventDefault();
   var page = $(this).attr('href').split('page=')[1];
   refreshTable(page);
@@ -168,7 +168,7 @@ $(document).on('click', '.edit-button', function() {
       url: '/get-project-data/' + projectId,
       method: 'GET',
       success: function(response) {
-        // check projectId                                           ~ URL UNDEFINED ~
+        // check projectId 
         console.log("project id = " + projectId);
           // Populate modal fields with existing data
           $('#editModal input[name="project_id"]').val(response.id);        
@@ -337,7 +337,7 @@ $(document).on('click', '.permanent-delete-btn', function() {
           },
           success: function(response) {
               // Handle success response, e.g., show a success message
-              alert('Project permanently deleted.');
+              alert('Project dihapus permanen');
               location.reload();
               // Optionally, refresh the page or update the table
           },

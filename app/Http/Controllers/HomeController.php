@@ -84,13 +84,6 @@ class HomeController extends Controller
 
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-    /**
      * Fetch the project data for modal.
      */
     public function getProjectData($projectId)
@@ -183,3 +176,4 @@ class HomeController extends Controller
         return Excel::download(new SortId, 'project-fs.xlsx');
     }
 }
+ 

@@ -163,11 +163,13 @@
                                         <div>
                                             <button type="button" class="btn" id="reloadButton"><i class="fa-solid fa-arrow-rotate-right" style="color: #255271"></i></button>
                                         </div>
-                                        <div>
-                                            <a  style="display: flex; align-items: center; color: #255271; text-decoration: none" href="{{ route('project-export') }}"><i class="fa-solid fa-file-export" style="margin-right: 5px" ></i>
-                                                <p class="export-text">export to excel</p>
-                                            </a>
-                                        </div>
+                                        @if (Auth::user()->role->name === 'Administrator')                                            
+                                            <div>
+                                                <a style="display: flex; align-items: center; color: #255271; text-decoration: none" href="{{ route('project-export') }}"><i class="fa-solid fa-file-export" style="margin-right: 5px" ></i>
+                                                    <p class="export-text">export to excel</p>
+                                                </a>                                        
+                                            </div>
+                                        @endif
                                     </div>
                                     <div class="search-container">
                                         <div class="input-group">
