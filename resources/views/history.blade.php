@@ -174,7 +174,7 @@
                                 <i class="fas fa-table"></i>Dashboard</a>                            
                         </li>                                                                
                         <li class="active">
-                            <a href="histor">
+                            <a href="history">
                                 <i class="fas fa-history"></i>History</a>                            
                         </li>                                                                
                     </ul>

@@ -23,7 +23,7 @@ Route::post('actionlogin', [LoginController::class, 'actionlogin'])->name('actio
 Route::middleware(['auth'])->group(function(){
     Route::get('table', [HomeController::class, 'index'])->name('table');
 
-    Route::get('histor', [HistoryController::class, 'index'])->middleware('admin')->name('histor');
+    Route::get('history', [HistoryController::class, 'index'])->middleware('admin')->name('history');
     Route::put('/projects/{id}/restore', [HistoryController::class, 'restoreProject'])->name('projects.restore');
     Route::delete('projects/permanent-delete/{id}', [HistoryController::class, 'permanentDelete'])->name('projects.permanent-delete');
 

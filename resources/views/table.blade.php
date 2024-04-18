@@ -86,7 +86,7 @@
                         </li>           
                         @if (Auth::user()->role->name === 'Administrator')                            
                             <li>
-                                <a href="histor">
+                                <a href="history">
                                     <i class="fas fa-history"></i>History</a>                            
                             </li>                                                                
                         @endif                                                     
