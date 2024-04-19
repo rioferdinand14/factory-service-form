@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::connection('cksql')->table('users', function (Blueprint $table) {
-            $table->foreignId('type_id')->nullable()->after('email')->constrained('type_user');
+        Schema::create('detail_users', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
         });
     }
 
@@ -21,9 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::connection('cksql')->table('users', function (Blueprint $table) {
-            $table->dropForeign(['type_id']);
-            $table->dropColumn('type_id');
-        });
+        Schema::dropIfExists('detail_users');
     }
 };

@@ -22,24 +22,7 @@ class User extends Authenticatable
         'name',
         'username',
         'password',
-        'email',
-        'type'
     ];
-
-    public function role()
-    {
-        return $this->belongsTo(TypeUser::class, 'type_id');
-    }
-                                   
-    /**
-     * Check if the user is an administrator.
-     *
-     * @return bool
-     */
-    public function isAdmin()
-    {
-        return $this->role->name === 'Administrator'; // Assuming 'name' is the column containing role names in the 'type_user' table
-    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -60,4 +43,24 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function detail_user()
+    {
+        return $this->hasOne(DetailUser::class, 'user_id');
+    }
+
+    // public function role()
+    // {
+    //     return $this->belongsTo(TypeUser::class, 'type_id');
+    // }
+                                   
+    /**
+     * Check if the user is an administrator.
+     *
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return $this->detail_user->type_user->name === 'Administrator'; // Assuming 'name' is the column containing role names in the 'type_user' table
+    }
 }
