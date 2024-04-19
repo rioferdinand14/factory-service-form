@@ -13,7 +13,7 @@
                 @csrf
                 <div class="container-fluid">                        
                     <div class="row">                                                           
-                        @if ( Auth::user()->role->name === 'Administrator' )
+                        @if ( Auth::user()->detail_user->type_user->name === 'Administrator' )
                             <div class="col-sm-5 col-md-6">                                                                           
                                 <input type="hidden" class="form-control datepicker" name="input_date" />
                                 <div class="mb-3">
@@ -67,7 +67,7 @@
                                     <textarea class="form-control w-100" style="border: 1px solid; border-color:rgb(223, 223, 223)" name="description_project" id="descript" cols="30" rows="10"></textarea>
                                 </div>                                                    
                             </div>
-                        @elseif (Auth::user()->role->name === 'Operator')
+                        @elseif (Auth::user()->detail_user->type_user->name === 'Operator')
                             <div class="col-sm-5 col-md-6">                                                                           
                                 <input type="hidden" class="form-control datepicker " id="datepicker" name="input_date" />
                                 <div class="mb-3">

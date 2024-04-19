@@ -84,7 +84,7 @@
                             <a href="table">
                                 <i class="fas fa-table"></i>Dashboard</a>                            
                         </li>           
-                        @if (Auth::user()->role->name === 'Administrator')                            
+                        @if (Auth::user()->detail_user->type_user->name === 'Administrator')                            
                             <li>
                                 <a href="history">
                                     <i class="fas fa-history"></i>History</a>                            
@@ -130,7 +130,7 @@
                                                     <h5 class="name">
                                                         <a href="#">{{ Auth::user()->username }}</a>
                                                     </h5>                                                    
-                                                    <span class="email">{{ Auth::user()->role->name }}</span>
+                                                    <span class="email">{{ Auth::user()->detail_user->type_user->name }}</span>
                                                 </div>
                                             </div>                                            
                                         @endif
@@ -163,7 +163,7 @@
                                         <div>
                                             <button type="button" class="btn" id="reloadButton"><i class="fa-solid fa-arrow-rotate-right" style="color: #255271"></i></button>
                                         </div>
-                                        @if (Auth::user()->role->name === 'Administrator')                                            
+                                        @if (Auth::user()->detail_user->type_user->name === 'Administrator')                                            
                                             <div>
                                                 <a style="display: flex; align-items: center; color: #255271; text-decoration: none" href="{{ route('project-export') }}"><i class="fa-solid fa-file-export" style="margin-right: 5px" ></i>
                                                     <p class="export-text">export to excel</p>
@@ -230,7 +230,7 @@
                                                 </td>
                                                 <td>
                                                     <div class="table-data-feature" id="editContainer">
-                                                        @if ( Auth::user()->role->name === 'Administrator' )                                                            
+                                                        @if ( Auth::user()->detail_user->type_user->name === 'Administrator' )                                                            
                                                             <button type="button" class="item edit-button" data-toggle="modal" data-id="{{ $item->id }}" data-target="#editModal" data-placement="top" title="Edit">
                                                                 <i class="zmdi zmdi-edit"></i>
                                                             </button>                                                        
@@ -340,7 +340,7 @@
     
 
             
-    <div id="UserRole" data-role="{{ Auth::user()->role->name }}" style="display: none"></div>    
+    <div id="UserRole" data-role="{{ Auth::user()->detail_user->type_user->name }}" style="display: none"></div>    
 
     
     <!-- Jquery JS-->

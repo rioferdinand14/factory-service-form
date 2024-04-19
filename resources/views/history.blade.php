@@ -217,7 +217,7 @@
                                                     <h5 class="name">
                                                         <a href="#">{{ Auth::user()->username }}</a>
                                                     </h5>                                                    
-                                                    <span class="email">{{ Auth::user()->role->name }}</span>
+                                                    <span class="email">{{ Auth::user()->detail_user->type_user->name === 'Administrator' }}</span>
                                                 </div>
                                             </div>                                            
                                         @endif
