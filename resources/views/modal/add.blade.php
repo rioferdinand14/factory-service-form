@@ -67,7 +67,7 @@
                                     <textarea class="form-control w-100" style="border: 1px solid; border-color:rgb(223, 223, 223)" name="description_project" id="descript" cols="30" rows="10"></textarea>
                                 </div>                                                    
                             </div>
-                        @elseif (Auth::user()->detail_user->type_user->name === 'Operator')
+                        @elseif (Auth::user()->detail_user->type_user->name === 'Operation Factory')
                             <div class="col-sm-5 col-md-6">                                                                           
                                 <input type="hidden" class="form-control datepicker " id="datepicker" name="input_date" />
                                 <div class="mb-3">
