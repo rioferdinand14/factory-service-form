@@ -7,12 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- Title Page--> 
+    <!-- Title Page-->
     <title>Tables</title>
 
     <!-- Fontfaces CSS-->
     <link href="css/font-face.css" rel="stylesheet" media="all">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
     <link href="vendor/font-awesome-5/css/fontawesome-all.min.css" rel="stylesheet" media="all">
     <link href="vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
@@ -33,7 +35,7 @@
     <!-- Main CSS-->
     <link href="css/theme.css" rel="stylesheet" media="all">
 
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>    
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
 
@@ -62,8 +64,8 @@
                     <ul class="navbar-mobile__list list-unstyled">
                         <li class="has-sub">
                             <a class="js-arrow" href="#">
-                                <i class="fas fa-tachometer-alt"></i>Dashboard</a>                           
-                        </li>                        
+                                <i class="fas fa-tachometer-alt"></i>Dashboard</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -82,14 +84,15 @@
                     <ul class="list-unstyled navbar__list">
                         <li class="active">
                             <a href="table">
-                                <i class="fas fa-table"></i>Dashboard</a>                            
-                        </li>           
-                        @if (Auth::user()->detail_user->type_user->name === 'Administrator' || Auth::user()->detail_user->type_user->name === 'Super Admin')                            
+                                <i class="fas fa-table"></i>Dashboard</a>
+                        </li>
+                        @if (Auth::user()->detail_user->type_user->name === 'Administrator' ||
+                                Auth::user()->detail_user->type_user->name === 'Super Admin')
                             <li>
                                 <a href="history">
-                                    <i class="fas fa-history"></i>History</a>                            
-                            </li>                                                                
-                        @endif                                                     
+                                    <i class="fas fa-history"></i>History</a>
+                            </li>
+                        @endif
                     </ul>
                 </nav>
             </div>
@@ -109,35 +112,37 @@
                                     <i class="zmdi zmdi-search"></i>
                                 </button>
                             </form> --}}
-                            <div class="header-button">                                
+                            <div class="header-button">
                                 <div class="account-wrap">
                                     <div class="account-item clearfix js-item-menu">
                                         <div class="image">
-                                            <img src="images/icon/avatar-01.png" alt="John Doe" oncontextmenu="return false"/>
+                                            <img src="images/icon/avatar-01.png" alt="John Doe"
+                                                oncontextmenu="return false" />
                                         </div>
                                         @if (Auth::check() && Auth::user())
                                             <div class="content">
-                                                <a class="js-acc-btn" href="#">{{ Auth::user()->username }}</a>
+                                                <a class="js-acc-btn" href="#">{{ Auth::user()->name }}</a>
                                             </div>
                                             <div class="account-dropdown js-dropdown">
                                                 <div class="info clearfix">
                                                     <div class="image">
                                                         <a href="">
-                                                            <img src="images/icon/avatar-01.png" alt="John Doe" oncontextmenu="return false"/>
-                                                    </a>
+                                                            <img src="images/icon/avatar-01.png" alt="John Doe"
+                                                                oncontextmenu="return false" />
+                                                        </a>
+                                                    </div>
+                                                    <div class="content">
+                                                        <h5 class="name">
+                                                            <a href="#">{{ Auth::user()->name }}</a>
+                                                        </h5>
+                                                        <span
+                                                            class="email">{{ Auth::user()->detail_user->type_user->name }}</span>
+                                                    </div>
                                                 </div>
-                                                <div class="content">
-                                                    <h5 class="name">
-                                                        <a href="#">{{ Auth::user()->username }}</a>
-                                                    </h5>                                                    
-                                                    <span class="email">{{ Auth::user()->detail_user->type_user->name }}</span>
-                                                </div>
-                                            </div>                                            
                                         @endif
-                                            <div class="account-dropdown__footer">
-                                                <a href="{{ route('actionlogout') }}">
-                                                    <i class="zmdi zmdi-power"></i>Logout</a>
-                                            </div>
+                                        <div class="account-dropdown__footer">
+                                            <a href="{{ route('actionlogout') }}">
+                                                <i class="zmdi zmdi-power"></i>Logout</a>
                                         </div>
                                     </div>
                                 </div>
@@ -145,135 +150,153 @@
                         </div>
                     </div>
                 </div>
-            </header>
-            <!-- END HEADER DESKTOP-->
+        </div>
+        </header>
+        <!-- END HEADER DESKTOP-->
 
-            
-            <!-- MAIN CONTENT-->
-            <div class="main-content">
-                <div class="section__content section__content--p30">
-                    <div class="container-fluid" id="table-pagination">                                                
-                        <div class="row">
-                            <div class="col-md-12">
-                                <!-- DATA TABLE -->
-                                <h3 class="title-5 m-b-35">Data Project Factory Service</h3>
-                                
-                                <div class="tables-header">
-                                    <div class="tables-header-item">
-                                        <div>
-                                            <button type="button" class="btn" id="reloadButton"><i class="fa-solid fa-arrow-rotate-right" style="color: #255271"></i></button>
-                                        </div>
-                                        @if (Auth::user()->detail_user->type_user->name === 'Administrator' || Auth::user()->detail_user->type_user->name === 'Super Admin')                                            
-                                            <div>
-                                                <a style="display: flex; align-items: center; color: #255271; text-decoration: none" href="{{ route('project-export') }}"><i class="fa-solid fa-file-export" style="margin-right: 5px" ></i>
-                                                    <p class="export-text">export to excel</p>
-                                                </a>                                        
-                                            </div>
-                                        @endif
+
+        <!-- MAIN CONTENT-->
+        <div class="main-content">
+            <div class="section__content section__content--p30">
+                <div class="container-fluid" id="table-pagination">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- DATA TABLE -->
+                            <h3 class="title-5 m-b-35">Data Project Factory Service</h3>
+
+                            <div class="tables-header">
+                                <div class="tables-header-item">
+                                    <div>
+                                        <button type="button" class="btn" id="reloadButton"><i
+                                                class="fa-solid fa-arrow-rotate-right"
+                                                style="color: #255271"></i></button>
                                     </div>
-                                    <div class="search-container">
-                                        <div class="input-group">
-                                            <input class="form-control" style="background: none; border: none; display: flex; align-items: center;" id="searchInput" type="text" placeholder="Search" autocomplete="on">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text" style="background: none; border: none; padding-left: 0; display: flex; align-items: center;">
-                                                    <button type="button"><i class="fa-solid fa-search" style="background: none;"></i></button>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button type="button" class="task" data-toggle="modal" data-target="#TaskModal">
+                                    @if (Auth::user()->detail_user->type_user->name === 'Administrator' ||
+                                            Auth::user()->detail_user->type_user->name === 'Super Admin')
                                         <div>
-                                            <i class="fa-solid fa-list-check"></i>
+                                            <a style="display: flex; align-items: center; color: #255271; text-decoration: none"
+                                                href="{{ route('project-export') }}"><i
+                                                    class="fa-solid fa-file-export" style="margin-right: 5px"></i>
+                                                <p class="export-text">export to excel</p>
+                                            </a>
                                         </div>
-                                        <div>
-                                            <p>Add Task</p>
-                                        </div>
-                                    </button>
+                                    @endif
                                 </div>
-                                
-                                <div class="table-responsive table-responsive-data2">
-                                    <table class="table table-data2 table-striped" id="dataTable">
-                                        <thead class="text-center">
-                                            <tr class="table-header">
-                                                <th>input date</th>
-                                                <th>project</th>
-                                                <th>Request Name</th>
-                                                <th>Category</th>
-                                                <th>Update</th>
-                                                <th>status</th>
-                                                <th>pic</th>
-                                                <th>ETA</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="text-center">
-                                            @foreach ($projects as $item)                                                                                                                                            
+                                <div class="search-container">
+                                    <div class="input-group">
+                                        <input class="form-control"
+                                            style="background: none; border: none; display: flex; align-items: center;"
+                                            id="searchInput" type="text" placeholder="Search" autocomplete="on">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"
+                                                style="background: none; border: none; padding-left: 0; display: flex; align-items: center;">
+                                                <button type="button"><i class="fa-solid fa-search"
+                                                        style="background: none;"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="task" data-toggle="modal" data-target="#TaskModal">
+                                    <div>
+                                        <i class="fa-solid fa-list-check"></i>
+                                    </div>
+                                    <div>
+                                        <p>Add Task</p>
+                                    </div>
+                                </button>
+                            </div>
+
+                            <div class="table-responsive table-responsive-data2">
+                                <table class="table table-data2 table-striped" id="dataTable">
+                                    <thead class="text-center">
+                                        <tr class="table-header">
+                                            <th>input date</th>
+                                            <th>project</th>
+                                            <th>Request Name</th>
+                                            <th>Category</th>
+                                            <th>Update</th>
+                                            <th>status</th>
+                                            <th>pic</th>
+                                            <th>ETA</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-center">
+                                        @foreach ($projects as $item)
                                             <tr class="tr">
-                                                <td >{{ $item->input_date }}</td>
-                                                <td >{{ $item->nama_project }} 
+                                                <td>{{ $item->input_date }}</td>
+                                                <td>{{ $item->nama_project }}
                                                     <p>Detail: {{ $item->detail }}</p>
-                                                </td>                                                
-                                                <td class="desc">{{ $item->requestor }} 
-                                                    @if($item->photos_img)
-                                                        <a href="{{ asset('storage/images/' . $item->photos_img) }}" alt="uploaded image" style="text-decoration: none; color:black" target="_blank">View Image</a>
+                                                </td>
+                                                <td class="desc">{{ $item->requestor }}
+                                                    @if ($item->photos_img)
+                                                        <a href="{{ asset('storage/images/' . $item->photos_img) }}"
+                                                            alt="uploaded image"
+                                                            style="text-decoration: none; color:black"
+                                                            target="_blank">View Image</a>
                                                     @else
                                                         <p style="cursor: not-allowed">No image</p>
                                                     @endif
                                                 </td>
-                                                <td >{{ $item->category_project }}</td>
+                                                <td>{{ $item->category_project }}</td>
                                                 <td>{!! nl2br(e($item->description_project)) !!}</td>
-                                                <td >{{ $item->status }}</td>
-                                                <td >
+                                                <td>{{ $item->status }}</td>
+                                                <td>
                                                     <span class="status--process">{{ $item->pic_project }}</span>
                                                 </td>
                                                 <td>{{ $item->eta_project }}
                                                 </td>
                                                 <td>
                                                     <div class="table-data-feature" id="editContainer">
-                                                        @if ( Auth::user()->detail_user->type_user->name === 'Administrator' )                                                            
-                                                            <button type="button" class="item edit-button" data-toggle="modal" data-id="{{ $item->id }}" data-target="#editModal" data-placement="top" title="Edit">
+                                                        @if (Auth::user()->detail_user->type_user->name === 'Administrator')
+                                                            <button type="button" class="item edit-button"
+                                                                data-toggle="modal" data-id="{{ $item->id }}"
+                                                                data-target="#editModal" data-placement="top"
+                                                                title="Edit">
                                                                 <i class="zmdi zmdi-edit"></i>
-                                                            </button>                                                        
-                                                            <button class="item delete-button-table" data-toggle="tooltip" data-id="{{ $item->id }}" data-placement="top" title="Delete">
+                                                            </button>
+                                                            <button class="item delete-button-table"
+                                                                data-toggle="tooltip" data-id="{{ $item->id }}"
+                                                                data-placement="top" title="Delete">
                                                                 <i class="zmdi zmdi-delete"></i>
-                                                            </button>                                            
-                                                        @endif                                                  
+                                                            </button>
+                                                        @endif
                                                     </div>
-                                                </td>                                                
-                                                @endforeach
-                                            </tr>
-                                        </tbody>                                        
-                                    </table>                                
-                                </div>
-                                <!-- END DATA TABLE -->
+                                                </td>
+                                        @endforeach
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                        </div>                                            
-                        {{ $projects->links() }}
+                            <!-- END DATA TABLE -->
+                        </div>
                     </div>
+                    {{ $projects->links() }}
                 </div>
             </div>
-        </div>        
-        @include('modal.add')
+        </div>
     </div>
-    <!-- MODAL EDIT-->        
-        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Edit Task</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="editTaskTable" method="POST" autocomplete="off">
-                            @csrf
-                            @method('PUT')
-                            <input type="hidden" name="project_id">
-                            <div class="container-fluid">                        
-                                <div class="row">                                                                    
-                                    <div class="col-sm-5 col-md-6">
-                                        {{-- <div class="mb-3">
+    @include('modal.add')
+    </div>
+    <!-- MODAL EDIT-->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Edit Task</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editTaskTable" method="POST" autocomplete="off">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="project_id">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-sm-5 col-md-6">
+                                    {{-- <div class="mb-3">
                                             <label for="date" class="align-items-start">Date:</label>
                                             <div class="input-group date w-100" id="datepickerContainer">
                                                 <input type="text" class="form-control datepicker" id="datepicker" name="input_date"/>
@@ -284,92 +307,98 @@
                                                 </span>
                                             </div>
                                         </div> --}}
-                                        <input type="hidden" class="form-control datepicker" name="input_date"/>
-                                        <div class="mb-3">
-                                            <label for="project" class="align-items-start">Project:</label>
-                                            <input type="text" class="form-control w-100" id="nama_project" name="nama_project">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="detail" class="align-items-start">Detail Project:</label>
-                                            <input type="text" class="form-control w-100" name="detail">
-                                        </div>
-                                        <input type="hidden" name="requestor">  
-                                        <div class="mb-3">
-                                            <label for="eta" class="align-items-start">ETA:</label>
-                                            <div class="input-group date w-100" id="datepickerContainer">
-                                                <input type="text" class="form-control datepicker " id="etapicker" name="eta_project" />
-                                                <span class="input-group-append">
-                                                    <span class="input-group-text bg-light d-block">
-                                                        <i class="fa fa-calendar"></i>
-                                                    </span>
+                                    <input type="hidden" class="form-control datepicker" name="input_date" />
+                                    <div class="mb-3">
+                                        <label for="project" class="align-items-start">Project:</label>
+                                        <input type="text" class="form-control w-100" id="nama_project"
+                                            name="nama_project">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="detail" class="align-items-start">Detail Project:</label>
+                                        <input type="text" class="form-control w-100" name="detail">
+                                    </div>
+                                    <input type="hidden" name="requestor">
+                                    <div class="mb-3">
+                                        <label for="eta" class="align-items-start">ETA:</label>
+                                        <div class="input-group date w-100" id="datepickerContainer">
+                                            <input type="text" class="form-control datepicker " id="etapicker"
+                                                name="eta_project" />
+                                            <span class="input-group-append">
+                                                <span class="input-group-text bg-light d-block">
+                                                    <i class="fa fa-calendar"></i>
                                                 </span>
-                                            </div>
-                                        </div>                                          
-                                        <div class="mb-3">
-                                            <label for="pic" class="align-items-start">PIC:</label>
-                                            <input type="text" class="form-control w-100" id="pic_project" name="pic_project">
+                                            </span>
                                         </div>
                                     </div>
-                                    <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">                                        
-                                        <div class="mb-3">
-                                            <label for="category" class="align-items-start">Category:</label>
-                                            <input type="text" class="form-control w-100" id="category_project" name="category_project">
-                                        </div>
-                                        <div class="mb-3" >                                        
-                                            <label for="status">Status</label>                                                            
-                                            <select class="form-control w-100" aria-label="Default select example" id="status" name="status">                                    
-                                                <option value="Open">Open</option>
-                                                <option value="On Progress">On Progress</option>
-                                                <option value="Done">Done</option>
-                                            </select>
-                                        </div>     
-                                        <div class="mb-3">
-                                            <label for="update_status">Update Status</label>
-                                            <textarea class="form-control w-100" style="border: 1px solid; border-color:rgb(223, 223, 223)" name="description_project" id="descript" cols="30" rows="10"></textarea>
-                                        </div>                                                    
+                                    <div class="mb-3">
+                                        <label for="pic" class="align-items-start">PIC:</label>
+                                        <input type="text" class="form-control w-100" id="pic_project"
+                                            name="pic_project">
                                     </div>
                                 </div>
-                            <div class="modal-footer">
-                                <button type="submit" id="saveData" class="btn btn-primary" >Save</button>
+                                <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
+                                    <div class="mb-3">
+                                        <label for="category" class="align-items-start">Category:</label>
+                                        <input type="text" class="form-control w-100" id="category_project"
+                                            name="category_project">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="status">Status</label>
+                                        <select class="form-control w-100" aria-label="Default select example"
+                                            id="status" name="status">
+                                            <option value="Open">Open</option>
+                                            <option value="On Progress">On Progress</option>
+                                            <option value="Done">Done</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="update_status">Update Status</label>
+                                        <textarea class="form-control w-100" style="border: 1px solid; border-color:rgb(223, 223, 223)"
+                                            name="description_project" id="descript" cols="30" rows="10"></textarea>
+                                    </div>
+                                </div>
                             </div>
-                        </form>
-                    </div>
-                </div>  
-            </div>  
+                            <div class="modal-footer">
+                                <button type="submit" id="saveData" class="btn btn-primary">Save</button>
+                            </div>
+                    </form>
+                </div>
+            </div>
         </div>
-    
+    </div>
 
-            
-    <div id="UserRole" data-role="{{ Auth::user()->detail_user->type_user->name }}" style="display: none"></div>    
 
-    
+
+    <div id="UserRole" data-role="{{ Auth::user()->detail_user->type_user->name }}" style="display: none"></div>
+
+
     <!-- Jquery JS-->
-    
-    
-    
+
+
+
     <script>
-        $(document).ready(function(){
+        $(document).ready(function() {
             $('#datepicker').datepicker({
                 format: 'mm/dd/yyyy', // Adjust the format as needed
                 todayHighlight: true,
                 autoclose: true,
                 orientation: 'bottom'
             });
-    
+
             // Set the date for the datepickerInput to today
             $('.datepickerInput').datepicker('setDate', new Date());
         });
     </script>
-    
+
     <script>
-        $(document).ready(function(){
+        $(document).ready(function() {
             $('#etapicker').datepicker({
                 format: 'mm/dd/yyyy', // Adjust the format as needed
                 todayHighlight: true,
                 autoclose: true,
                 orientation: 'bottom'
             });
-    
+
             // Set the date for the datepickerInput to today
             $('.datepickerInput').datepicker('setDate', new Date());
         });
@@ -379,9 +408,9 @@
         var baseUrl = "{{ asset('storage/images/') }}";
     </script>
 
-    
 
-{{-- <script>
+
+    {{-- <script>
         $(document).ready(function() {
             $('.datepicker').datepicker({
                 format: 'yyyy-mm-dd',
@@ -406,7 +435,7 @@
     </script> --}}
 
 
-    
+
 
     <!-- Bootstrap JS-->
     {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
@@ -415,28 +444,25 @@
     <script src="vendor/bootstrap-4.1/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <!-- Vendor JS       -->
-    <script src="vendor/slick/slick.min.js">
-    </script>
+    <script src="vendor/slick/slick.min.js"></script>
     <script src="vendor/wow/wow.min.js"></script>
     <script src="vendor/animsition/animsition.min.js"></script>
-    <script src="vendor/bootstrap-progressbar/bootstrap-progressbar.min.js">
-    </script>
+    <script src="vendor/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
     <script src="vendor/counter-up/jquery.waypoints.min.js"></script>
-    <script src="vendor/counter-up/jquery.counterup.min.js">
-    </script>
+    <script src="vendor/counter-up/jquery.counterup.min.js"></script>
     <script src="vendor/circle-progress/circle-progress.min.js"></script>
     <script src="vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="vendor/chartjs/Chart.bundle.min.js"></script>
-    <script src="vendor/select2/select2.min.js">
-    </script>
+    <script src="vendor/select2/select2.min.js"></script>
 
     <!-- Main JS-->
     <script src="js/main.js"></script>
 
-    
+
 
 </body>
 
