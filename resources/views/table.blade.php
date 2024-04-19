@@ -84,7 +84,7 @@
                             <a href="table">
                                 <i class="fas fa-table"></i>Dashboard</a>                            
                         </li>           
-                        @if (Auth::user()->detail_user->type_user->name === 'Administrator')                            
+                        @if (Auth::user()->detail_user->type_user->name === 'Administrator' || Auth::user()->detail_user->type_user->name === 'Super Admin')                            
                             <li>
                                 <a href="history">
                                     <i class="fas fa-history"></i>History</a>                            
@@ -163,7 +163,7 @@
                                         <div>
                                             <button type="button" class="btn" id="reloadButton"><i class="fa-solid fa-arrow-rotate-right" style="color: #255271"></i></button>
                                         </div>
-                                        @if (Auth::user()->detail_user->type_user->name === 'Administrator')                                            
+                                        @if (Auth::user()->detail_user->type_user->name === 'Administrator' || Auth::user()->detail_user->type_user->name === 'Super Admin')                                            
                                             <div>
                                                 <a style="display: flex; align-items: center; color: #255271; text-decoration: none" href="{{ route('project-export') }}"><i class="fa-solid fa-file-export" style="margin-right: 5px" ></i>
                                                     <p class="export-text">export to excel</p>
@@ -266,7 +266,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="editTaskTable" action="{{ route('update-data', $item->id) }}" method="POST" autocomplete="off">
+                        <form id="editTaskTable" method="POST" autocomplete="off">
                             @csrf
                             @method('PUT')
                             <input type="hidden" name="project_id">
