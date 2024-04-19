@@ -10,6 +10,8 @@
     <!-- Title Page-->
     <title>Tables</title>
 
+    <link rel="shortcut icon" href="{{ asset('/images/logo-siemens.png') }}" type="image/x-icon">
+
     <!-- Fontfaces CSS-->
     <link href="css/font-face.css" rel="stylesheet" media="all">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
