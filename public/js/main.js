@@ -23,77 +23,6 @@
     return str.replace(/(?:\r\n|\r|\n)/g, '<br>');
   }
 
-// Function to refresh table data
-function refreshTable(page = 1) {
-  $.ajax({
-    url: '/get-latest-projects?page=' + page,
-    method: 'GET',
-    success: function(response) {
-      updateTable(response);
-    },
-    error: function(xhr, status, error) {
-      console.error('Error refreshing table:', error);
-    }
-  });
-}
-// Function to update table with new data
-function updateTable(response) {
-  var role = $('#UserRole').data('role');
-  var tbody = $('.table-responsive-data2 table tbody');  
-  tbody.empty();
-  
-
-  $.each(response.data, function(index, item) {
-    var row = '<tr class="tr">';
-    row += '<td>' + item.input_date + '</td>';
-    row += '<td>' + item.nama_project + '<p>Detail: ' + item.detail + '</p></td>';
-    row += '<td class="desc">' + item.requestor;
-    if (item.photos_img) {
-      row += '<a href="' + baseUrl + '/' + item.photos_img + '" style="text-decoration: none; color:black" target="_blank" alt="Uploaded Image">View Image</a>';
-  } else {
-      row += '<p style="cursor: not-allowed">No Image</p>';
-  }
-    row += '</td>';
-    row += '<td>' + item.category_project + '</td>';
-    row += '<td>' + nl2brJS(item.description_project) + '</td>';
-    row += '<td>' + item.status + '</td>';
-    row += '<td><span class="status--process">' + (item.pic_project !== null ? item.pic_project : '') + '</span></td>';
-    row += '<td>' + item.eta_project + '</td>';
-    row += '<td><div class="table-data-feature" id="editContainer">';
-    if (role === 'Administrator') {      
-        row += '<button type="button" class="item edit-button" data-toggle="modal" data-target="#editModal" data-id="' + item.id + '" data-placement="top" title="Edit"><i class="zmdi zmdi-edit"></i></button>';
-        row += '<button type="button" class="item delete-button-table" data-id="' + item.id + '" data-placement="top" title="Delete"><i class="zmdi zmdi-delete"></i></button>';
-    }
-    row += '</div></td></tr>';
-    tbody.append(row);
-  });
-  $('.pagination').html(response.links);
-}
-
-// Function to handle search input
-$(document).ready(function() {
-  $('#searchInput').on('input', function() {
-    var query = $(this).val();
-
-    if (query !== '') {
-      $.ajax({
-        url: '/search',
-        method: 'GET',
-        data: { query: query },
-        dataType: 'json',
-        success: function(data) {
-          updateTable(data);
-        },
-        error: function(error) {
-          console.error('Error fetching search results:', error);
-        }
-      });
-    } else {
-      refreshTable(); // Empty search query, refresh the table
-    }
-  });
-});
-
 // Load table data on page load
 $(document).ready(function() {
   $('#reloadButton').click(function() {
@@ -118,17 +47,13 @@ $(document).ready(function () {
       // Create a new FormData object
       var formData = new FormData(this);
 
-      // Add CSRF token manually
-      var csrfToken = $('meta[name="csrf-token"]').attr('content');
-      formData.append('_token', csrfToken); // Append CSRF token to FormData
+     
+      var url = $(this).attr('data-action');
 
       // Use AJAX to submit the form
       $.ajax({
-          url: '/create-data',
-          method: 'POST',
-          headers: {
-              'X-CSRF-TOKEN': csrfToken
-          },
+          url: url,
+          method: 'POST',          
           processData: false, // Prevent jQuery from processing the data
           contentType: false, // Prevent jQuery from setting content type
           data: formData,
@@ -156,41 +81,34 @@ $(document).ready(function () {
   });
 });
 
-// Function to show modal with data
 $(document).on('click', '.edit-button', function() {
   var projectId = $(this).data('id');
-  console.log(projectId);
+  if (projectId === '') {
+      console.log('No id specified');
+      return; // Exit the function if projectId is empty
+  }
+
   $('#editModal').data('projectId', projectId);
 
-  
+  // Generate the route dynamically with the projectId
+  var editAction = $(this).data('action')
+
   // Fetch existing data of the selected project
   $.ajax({
-      url: '/get-project-data/' + projectId,
+      url: editAction,
       method: 'GET',
       success: function(response) {
-        // check projectId 
-        console.log("project id = " + projectId);
           // Populate modal fields with existing data
-          $('#editModal input[name="project_id"]').val(response.id);        
-          $('#editModal input[name="input_date"]').val(response.input_date);        
+          $('#editModal input[name="project_id"]').val(response.id);
+          $('#editModal input[name="input_date"]').val(response.input_date);
           $('#editModal input[name="eta_project"]').val(response.eta_project);
           $('#editModal input[name="requestor"]').val(response.requestor);
           $('#editModal input[name="detail"]').val(response.detail);
           $('#editModal input[name="pic_project"]').val(response.pic_project);
           $('#editModal input[name="nama_project"]').val(response.nama_project);
           $('#editModal input[name="category_project"]').val(response.category_project);
-          $('#editModal select[name="status"] option').each(function() {
-            // Compare the value of each option with the statusValue
-            if ($(this).val() == response.status) {
-                // If the value matches, set the selected attribute
-                $(this).prop('selected', true);
-            } else {
-                // If it doesn't match, make sure the option is not selected
-                $(this).prop('selected', false);
-            }
-        });
+          $('#editModal select[name="status"]').val(response.status);
           $('#editModal textarea[name="description_project"]').val(response.description_project);
-          // Repeat this for other fields or use appropriate jQuery selectors
 
           // Show the modal
           $('#editModal').modal('show');
@@ -210,19 +128,15 @@ $(document).on('submit', '#editTaskTable', function(event) {
   var projectId = $('#editModal').data('projectId');
   // console.log("this is = " + projectId);
 
+  var url = $(this).attr('data-action');
+
   // Serialize form data
   var formData = $(this).serialize();
 
-  // Retrieve CSRF token from the appropriate <meta> tag
-  var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
   // Submit form data via AJAX
   $.ajax({
-      url: '/update-project/' + projectId,
+      url: url,
       method: 'PUT',
-      headers: {
-          'X-CSRF-TOKEN': csrfToken
-      },
       data: formData,
       success: function(response) {
           // Handle success response
@@ -256,19 +170,15 @@ $(document).on('submit', '#editTaskHistory', function(event) {
   var projectId = $('#editModal').data('projectId');
   // console.log("this is = " + projectId);
 
+  var url = $(this).attr('data-action');
+
   // Serialize form data
   var formData = $(this).serialize();
 
-  // Retrieve CSRF token from the appropriate <meta> tag
-  var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
   // Submit form data via AJAX
   $.ajax({
-      url: '/update-project/' + projectId,
+      url: url,
       method: 'PUT',
-      headers: {
-          'X-CSRF-TOKEN': csrfToken
-      },
       data: formData,
       success: function(response) {
           // Handle success response
@@ -295,41 +205,49 @@ $(document).on('submit', '#editTaskHistory', function(event) {
 
 // Function to soft delete data
 $(document).on('click', '.delete-button-table', function () {
-    var projectId = $(this).data('id');
-    var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-    if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {      
+  var projectId = $(this).data('id');
+  var url = $(this).data('action');
+  
+  console.log(url);
+  if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {   
+      // Retrieve CSRF token from the appropriate <meta> tag
+      var csrfToken = $('meta[name="csrf-token"]').attr('content');   
+
       $.ajax({
-        url: '/delete-project/' + projectId,
-        method: 'DELETE',
-        headers: {
-          'X-CSRF-TOKEN': csrfToken
-        },
-        success: function(response) {
-            // Handle success response
-            console.log('Project deleted successfully:', projectId);
-            alert('Project dihapus');
-            
-            refreshTable();
-            // Optionally, refresh the table or update UI
-        },
-        error: function(xhr, status, error) {
-            // Handle error response
-            console.error('Error deleting project:', error);
-            // Optionally, display an error message to the user
-        }
+          url: url,
+          method: 'DELETE',
+          headers: {
+              'X-CSRF-TOKEN': csrfToken
+          },
+          success: function(response) {
+              // Handle success response
+              console.log('Project deleted successfully:', projectId);
+              alert('Project dihapus');
+          
+
+              refreshTable();
+              // Optionally, refresh the table or update UI
+          },
+          error: function(xhr, status, error) {
+              // Handle error response
+              console.error('Error deleting project:', error);
+              // Optionally, display an error message to the user
+          }
       });
-    }
-});
+  }
+  });
+
 
 
 // Function to permanently delete data
 $(document).on('click', '.permanent-delete-btn', function() {
   var projectId = $(this).data('project-id');
+  var url = $(this).data('action');
 
   if (confirm('Are you sure you want to permanently delete this project?')) {
       $.ajax({
-          url: '/projects/permanent-delete/' + projectId,
+          url: url,
           type: 'DELETE',
           method: 'DELETE',
           headers: {

@@ -224,6 +224,11 @@
                                         </tr>
                                     </thead>
                                     <tbody class="text-center">
+                                        @if ($projects->isEmpty())
+                                            <tr class="tr">
+                                                <td colspan="9" class="text-center"> No Projects Available </td>
+                                            </tr>
+                                        @else
                                         @foreach ($projects as $item)
                                             <tr class="tr">
                                                 <td>{{ $item->input_date }}</td>
@@ -240,7 +245,7 @@
                                                         <p style="cursor: not-allowed">No image</p>
                                                     @endif
                                                 </td>
-                                                <td>{{ $item->category_project }}</td>
+                                                <td>{{ $item->category_project ? $item->category_project : '' }}</td>
                                                 <td>{!! nl2br(e($item->description_project)) !!}</td>
                                                 <td>{{ $item->status }}</td>
                                                 <td>
@@ -250,15 +255,16 @@
                                                 </td>
                                                 <td>
                                                     <div class="table-data-feature" id="editContainer">
-                                                        @if (Auth::user()->detail_user->type_user->name === 'Administrator')
+                                                        @if (Auth::user()->detail_user->type_user->name === 'Administrator')                                                            
                                                             <button type="button" class="item edit-button"
-                                                                data-toggle="modal" data-id="{{ $item->id }}"
+                                                                data-toggle="modal" data-id="{{ $item->id }}" data-action="{{ route('get-project-data', ['projectId' => $item->id ]) }}"
                                                                 data-target="#editModal" data-placement="top"
                                                                 title="Edit">
                                                                 <i class="zmdi zmdi-edit"></i>
                                                             </button>
                                                             <button class="item delete-button-table"
-                                                                data-toggle="tooltip" data-id="{{ $item->id }}"
+                                                                data-toggle="tooltip" data-id="{{ $item->id }}" 
+                                                                data-action="{{ route('delete-project', ['projectId' => $item->id]) }}"
                                                                 data-placement="top" title="Delete">
                                                                 <i class="zmdi zmdi-delete"></i>
                                                             </button>
@@ -266,6 +272,7 @@
                                                     </div>
                                                 </td>
                                         @endforeach
+                                        @endif
                                         </tr>
                                     </tbody>
                                 </table>
@@ -291,7 +298,11 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="editTaskTable" method="POST" autocomplete="off">
+                    @if ($projects->isEmpty())
+                        <form id="editTaskHistory" method="POST" autocomplete="off">
+                    @else
+                    <form id="editTaskTable" data-action="{{ route('update-data', ['projectId' => $item->id]) }}" method="POST" autocomplete="off">
+                    @endif
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="project_id">
@@ -341,8 +352,12 @@
                                 <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
                                     <div class="mb-3">
                                         <label for="category" class="align-items-start">Category:</label>
-                                        <input type="text" class="form-control w-100" id="category_project"
-                                            name="category_project">
+                                        <select class="form-control w-100" id="category_project" name="category_project">
+                                            <option selected value="">Pilih Kategori</option>
+                                            <option value="Infrastructure">Infrastructure</option>
+                                            <option value="Maintenance">Maintenance</option>
+                                            <option value="Tool Store">Tool Store</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
                                         <label for="status">Status</label>
@@ -410,31 +425,97 @@
         var baseUrl = "{{ asset('storage/images/') }}";
     </script>
 
-
-
-    {{-- <script>
+    <script>
+        // Function to handle search input
         $(document).ready(function() {
-            $('.datepicker').datepicker({
-                format: 'yyyy-mm-dd',
-                autoclose: true, // Close the datepicker when a date is selected
-                orientation: 'bottom' // Set the position of the datepicker (e.g., 'auto', 'top', 'bottom', 'left', 'right')
+            $('#searchInput').on('input', function() {
+                var query = $(this).val();
+
+                if (query !== '') {
+                $.ajax({
+                    url: "{{ route('search') }}",
+                    method: 'GET',
+                    data: { query: query },
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.data.length > 0) {
+                            updateTable(data);
+                        } else {
+                            $('#dataTable tbody').html('<tr class="tr"><td colspan="9" class="text-center">Project tidak ditemukan</td></tr>'); // Display "No Projects Available" message
+                        }
+                    },
+                    error: function(error) {
+                        console.error('Error fetching search results:', error);
+                    }
+                });
+                } else {
+                refreshTable(); // Empty search query, refresh the table
+                }
             });
         });
-    </script> --}}
+    </script>
 
-    {{-- <script>
-        const handleClick = (e) => {
-            e.preventDefault();
-            const modalElement = document.getElementById('.item[data-bs-toggle="modal"]');
-            const modal = new Modal(modalElement, {backdrop: false, keyboard: true, focus: true});
-            console.log('button clicked');
-            modal.show();
+    <script>
+       // Function to refresh table data
+       function refreshTable(page = 1) {
+            $.ajax({
+                url: "{{ route('get-latest-projects') }}?page=" + page,
+                method: 'GET',
+                success: function(response) {
+                    updateTable(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error refreshing table:', error);
+                }
+            });
         }
 
-    </script> --}}
-    {{-- <script>
-       
-    </script> --}}
+        // Function to update table with new data
+        function updateTable(response) {
+            var role = $('#UserRole').data('role');
+            var tbody = $('.table-responsive-data2 table tbody');
+            tbody.empty();
+
+            $.each(response.data, function(index, item) {
+                var row = '<tr class="tr">';
+                row += '<td>' + item.input_date + '</td>';
+                row += '<td>' + item.nama_project + '<p>Detail: ' + item.detail + '</p></td>';
+                row += '<td class="desc">' + item.requestor;
+                if (item.photos_img) {
+                    row += '<a href="' + baseUrl + '/' + item.photos_img + '" style="text-decoration: none; color:black" target="_blank" alt="Uploaded Image">View Image</a>';
+                } else {
+                    row += '<p style="cursor: not-allowed">No Image</p>';
+                }
+                row += '</td>';
+                var categoryProject = item.category_project ? item.category_project : '';
+                row += '<td>' + categoryProject + '</td>';
+                row += '<td>' + nl2brJS(item.description_project) + '</td>';
+                row += '<td>' + item.status + '</td>';
+                row += '<td><span class="status--process">' + (item.pic_project !== null ? item.pic_project : '') + '</span></td>';
+                row += '<td>' + item.eta_project + '</td>';
+                row += '<td><div class="table-data-feature" id="editContainer">';
+                if (role === 'Administrator') {
+                    // Generate edit action URL using Blade syntax
+                    var editAction = '{{ route('get-project-data', ['projectId' => ':id']) }}';
+                    editAction = editAction.replace(':id', item.id);
+                    row += '<button style="color: red" type="button" class="item edit-button" data-toggle="modal" data-target="#editModal" data-id="' + item.id + '" data-action="' + editAction + '" data-placement="top" title="Edit"><i class="zmdi zmdi-edit"></i></button>';
+                    // For delete action, you can directly use PHP to generate the route
+                    var deleteAction = '{{ route('delete-project', ['projectId' => ':id']) }}';
+                    deleteAction = deleteAction.replace(':id', item.id);
+                    row += '<button type="button" class="item delete-button-table" data-id="' + item.id + '" data-action="' + deleteAction + '" data-placement="top" title="Delete"><i class="zmdi zmdi-delete"></i></button>';
+                }
+                row += '</div></td></tr>';
+                tbody.append(row);
+            });
+            $('.pagination').html(response.links);
+        }
+
+    </script>
+    
+    <script>
+        
+    </script>
+
 
 
 
@@ -460,6 +541,8 @@
     <script src="vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="vendor/chartjs/Chart.bundle.min.js"></script>
     <script src="vendor/select2/select2.min.js"></script>
+
+    
 
     <!-- Main JS-->
     <script src="js/main.js"></script>

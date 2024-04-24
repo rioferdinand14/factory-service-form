@@ -9,7 +9,7 @@
           </button>
         </div>
         <div class="modal-body">
-            <form id="addTask" method="POST" autocomplete="off" enctype="multipart/form-data">
+            <form id="addTask" data-action="{{ route('projects.create-data') }}" method="POST" autocomplete="off" enctype="multipart/form-data">
                 @csrf
                 <div class="container-fluid">                        
                     <div class="row">                                                           
@@ -48,7 +48,7 @@
                                 <div class="mb-3">
                                     <label for="category" class="align-items-start">Category:</label>
                                     <select class="form-control w-100" id="category_project" name="category_project">
-                                        <option selected>Pilih Kategori</option>
+                                        <option selected value="">Pilih Kategori</option>
                                         <option value="Infrastructure">Infrastructure</option>
                                         <option value="Maintenance">Maintenance</option>
                                         <option value="Tool Store">Tool Store</option>
