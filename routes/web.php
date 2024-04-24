@@ -30,8 +30,8 @@ Route::middleware(['auth'])->group(function(){
 
     Route::get('actionlogout', [LoginController::class, 'actionlogout'])->name('actionlogout');
 
-    Route::get('/get-latest-projects', [HomeController::class, 'getLatestProjects']);
-    Route::post('/create-data', [HomeController::class, 'store'])->name('create-data');
+    Route::get('/get-latest-projects', [HomeController::class, 'getLatestProjects'])->name('get-latest-projects');
+    Route::post('/projects/create-data', [HomeController::class, 'store'])->name('projects.create-data');
 
     Route::get('/get-project-data/{projectId}', [HomeController::class, 'getProjectData'])->name('get-project-data');
     Route::put('/update-project/{projectId}', [HomeController::class, 'updateProject'])->name('update-data');

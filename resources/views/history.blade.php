@@ -51,7 +51,7 @@
                 <div class="container-fluid">
                     <div class="header-mobile-inner">
                         <a class="logo" href="index.html">
-                            <img src="images/icon/logo.png" alt="CoolAdmin" />
+                            <img src="images/icon/logo-siemens.png" alt="CoolAdmin" />
                         </a>
                         <button class="hamburger hamburger--slider" type="button">
                             <span class="hamburger-box">
@@ -248,9 +248,9 @@
                     <div class="row">
                         <div class="col-md-12">
                             <!-- DATA TABLE -->
-                            <h3 class="title-5 m-b-35">Data Project Factory Service</h3>
+                            <h3 class="title-5 m-b-35">History Project Factory Service</h3>
 
-                            <div class="tables-header" style="justify-content: center">
+                            {{-- <div class="tables-header" style="justify-content: center">
                                 <div class="search-container">
                                     <div class="input-group">
                                         <input class="form-control"
@@ -265,7 +265,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="table-responsive table-responsive-data2">
                                 <table class="table table-data2 table-striped" id="dataTable">
@@ -283,6 +283,11 @@
                                         </tr>
                                     </thead>
                                     <tbody class="text-center">
+                                        @if ($projects->isEmpty())
+                                            <tr class="tr">
+                                                <td colspan="9" class="text-center"> No Projects Available </td>
+                                            </tr>
+                                        @else
                                         @foreach ($projects as $item)
                                             <tr class="tr">
                                                 <td>{{ $item->input_date }}</td>
@@ -299,7 +304,7 @@
                                                         <p style="cursor: not-allowed">No image</p>
                                                     @endif
                                                 </td>
-                                                <td>{{ $item->category_project }}</td>
+                                                <td>{{ $item->category_project ? $item->category_project : '' }}</td>
                                                 <td>{!! nl2br(e($item->description_project)) !!}</td>
                                                 <td style="color:red">{{ $item->status }}</td>
                                                 <td>
@@ -311,7 +316,7 @@
                                                     <div class="table-data-feature" id="editContainer">
                                                         @if ($item->status === 'Done')
                                                             <button type="button" class="item edit-button"
-                                                                data-toggle="modal" data-id="{{ $item->id }}"
+                                                                data-toggle="modal" data-id="{{ $item->id }}" data-action="{{ route('get-project-data', ['projectId' => $item->id ]) }}"
                                                                 data-target="#editModal" data-placement="top"
                                                                 title="Edit">
                                                                 <i class="zmdi zmdi-edit"></i>
@@ -319,6 +324,7 @@
                                                             <button class="item permanent-delete-btn"
                                                                 data-toggle="tooltip"
                                                                 data-project-id="{{ $item->id }}"
+                                                                data-action="{{ route('projects.permanent-delete', ['id' => $item->id]) }}"
                                                                 data-placement="top" title="Delete">
                                                                 <i class="zmdi zmdi-delete"></i>
                                                             </button>
@@ -330,6 +336,7 @@
                                                             <button class="item permanent-delete-btn"
                                                                 data-toggle="tooltip"
                                                                 data-project-id="{{ $item->id }}"
+                                                                data-action="{{ route('projects.permanent-delete', ['id' => $item->id]) }}"
                                                                 data-placement="top" title="Delete">
                                                                 <i class="zmdi zmdi-delete"></i>
                                                             </button>
@@ -337,6 +344,7 @@
                                                             <button class="item permanent-delete-btn"
                                                                 data-toggle="tooltip"
                                                                 data-project-id="{{ $item->id }}"
+                                                                data-action="{{ route('projects.permanent-delete', ['id' => $item->id]) }}"
                                                                 data-placement="top" title="Delete">
                                                                 <i class="zmdi zmdi-delete"></i>
                                                             </button>
@@ -350,6 +358,7 @@
                                                     </div>
                                                 </td>
                                         @endforeach
+                                        @endif
                                         </tr>
                                     </tbody>
                                 </table>
@@ -375,7 +384,11 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="editTaskHistory" method="POST" autocomplete="off">
+                    @if ($projects->isEmpty())
+                        <form id="editTaskHistory" method="POST" autocomplete="off">
+                    @else
+                        <form id="editTaskHistory" data-action="{{ route('update-data', ['projectId' => $item->id]) }}" method="POST" autocomplete="off">
+                    @endif
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="project_id">
@@ -425,8 +438,12 @@
                                 <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
                                     <div class="mb-3">
                                         <label for="category" class="align-items-start">Category:</label>
-                                        <input type="text" class="form-control w-100" id="category_project"
-                                            name="category_project">
+                                        <select class="form-control w-100" id="category_project" name="category_project">
+                                            <option selected value="">Pilih Kategori</option>
+                                            <option value="Infrastructure">Infrastructure</option>
+                                            <option value="Maintenance">Maintenance</option>
+                                            <option value="Tool Store">Tool Store</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
                                         <label for="status">Status</label>

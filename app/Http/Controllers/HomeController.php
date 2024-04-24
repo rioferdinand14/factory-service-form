@@ -52,7 +52,7 @@ class HomeController extends Controller
              'pic_project' => 'nullable',
              'nama_project' => 'required',
              'detail' => 'required',
-             'category_project' => 'required',
+             'category_project' => 'nullable',
              'status' => 'nullable',
              'description_project' => 'nullable',
              'photos_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240'
@@ -153,15 +153,19 @@ class HomeController extends Controller
         $query = $request->input('query');
 
         // Perform the search query on the Project model
-        $projects = Project::where('nama_project', 'LIKE', "%$query%")
-                        ->orWhere('requestor', 'LIKE', "%$query%")
-                        ->orWhere('category_project', 'LIKE', "%$query%")
-                        ->orWhere('description_project', 'LIKE', "%$query%")
-                        ->orWhere('status', 'LIKE', "%$query%")
-                        ->orWhere('pic_project', 'LIKE', "%$query%")
-                        ->orWhere('eta_project', 'LIKE', "%$query%")
-                        ->orderBy('id', 'desc')
-                        ->paginate(5); // Adjust pagination limit as needed
+        $projects = Project::where(function($queryBuilder) use ($query) {
+                $queryBuilder->where('nama_project', 'LIKE', "%$query%")
+                    ->orWhere('requestor', 'LIKE', "%$query%")
+                    ->orWhere('category_project', 'LIKE', "%$query%")
+                    ->orWhere('description_project', 'LIKE', "%$query%")
+                    ->orWhere('status', 'LIKE', "%$query%")
+                    ->orWhere('pic_project', 'LIKE', "%$query%")
+                    ->orWhere('eta_project', 'LIKE', "%$query%");
+            })
+            ->where('status', '!=', 'done')
+            ->whereNull('deleted_at')
+            ->orderBy('id', 'desc')
+            ->paginate(5);
 
         // Return the search results
         return response()->json([
@@ -169,6 +173,7 @@ class HomeController extends Controller
             'links' => $projects->links()->toHtml(), // Get pagination links as HTML
         ]);
     }
+
 
     
     public function export()
