@@ -48,7 +48,7 @@
                                 <div class="mb-3">
                                     <label for="category" class="align-items-start">Category:</label>
                                     <select class="form-control w-100" id="category_project" name="category_project">
-                                        <option selected value="">Pilih Kategori</option>
+                                        <option selected disabled>Pilih Kategori</option>
                                         <option value="Infrastructure">Infrastructure</option>
                                         <option value="Maintenance">Maintenance</option>
                                         <option value="Tool Store">Tool Store</option>
@@ -98,7 +98,7 @@
                                 <div class="mb-3">
                                     <label for="category" class="align-items-start">Category:</label>
                                     <select class="form-control w-100" id="category_project" name="category_project">
-                                        <option selected>Pilih Kategori</option>
+                                        <option disabled selected>Pilih Kategori</option>
                                         <option value="Infrastructure">Infrastructure</option>
                                         <option value="Maintenance">Maintenance</option>
                                         <option value="Tool Store">Tool Store</option>
