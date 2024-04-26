@@ -353,10 +353,10 @@
                                     <div class="mb-3">
                                         <label for="category" class="align-items-start">Category:</label>
                                         <select class="form-control w-100" id="category_project" name="category_project">
-                                            <option selected disabled>Pilih Kategori</option>
-                                            <option value="Infrastructure">Infrastructure</option>
-                                            <option value="Maintenance">Maintenance</option>
-                                            <option value="Tool Store">Tool Store</option>
+                                            <option disabled value="" {{ $item->category_project === 'null' ? 'selected' : '' }}>Pilih Kategori</option>
+                                            <option value="Infrastructure" {{ $item->category_project === 'Infrastructure' ? 'selected' : '' }}>Infrastructure</option>
+                                            <option value="Maintenance" {{ $item->category_project === 'Maintenance' ? 'selected' : '' }}>Maintenance</option>
+                                            <option value="Tool Store" {{ $item->category_project === 'Tool Store' ? 'selected' : '' }}>Tool Store</option>
                                         </select>
                                     </div>
                                     <div class="mb-3">

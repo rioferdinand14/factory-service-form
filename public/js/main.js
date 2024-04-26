@@ -106,7 +106,7 @@ $(document).on('click', '.edit-button', function() {
           $('#editModal input[name="detail"]').val(response.detail);
           $('#editModal input[name="pic_project"]').val(response.pic_project);
           $('#editModal input[name="nama_project"]').val(response.nama_project);
-          $('#editModal input[name="category_project"]').val(response.category_project);
+          $('#editModal select[name="category_project"]').val(response.category_project);
           $('#editModal select[name="status"]').val(response.status);
           $('#editModal textarea[name="description_project"]').val(response.description_project);
 
