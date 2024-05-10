@@ -70,7 +70,7 @@ $(document).ready(function () {
                   $('body').removeClass('modal-open');
                   $('.modal-backdrop').remove();
 
-                  refreshTable();
+                  location.reload();
               }
               // Update the table (Assuming you have a function to update the table)
           },
@@ -126,6 +126,7 @@ $(document).on('submit', '#editTaskTable', function(event) {
 
   // Get the project ID from the data attribute of the modal
   var projectId = $('#editModal').data('projectId');
+  console.log(projectId);
   // console.log("this is = " + projectId);
 
   var url = $(this).attr('data-action');
