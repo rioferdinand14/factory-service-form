@@ -65,8 +65,10 @@
                 <div class="container-fluid">
                     <ul class="navbar-mobile__list list-unstyled">
                         <li class="has-sub">
-                            <a class="js-arrow" href="#">
+                            <a class="js-arrow" href="{{ route('table') }}">
                                 <i class="fas fa-tachometer-alt"></i>Dashboard</a>
+                            <a class="js-arrow" href="{{ route('history') }}">
+                                <i class="fas fa-history"></i>History</a>    
                         </li>
                     </ul>
                 </div>
@@ -77,7 +79,7 @@
         <!-- MENU SIDEBAR-->
         <aside class="menu-sidebar d-none d-lg-block">
             <div class="logo">
-                <a href="/table">
+                <a href="{{ route('table') }}">
                     <img src="images/icon/logo-siemens.png" alt="Siemens" />
                 </a>
             </div>
@@ -85,13 +87,13 @@
                 <nav class="navbar-sidebar">
                     <ul class="list-unstyled navbar__list">
                         <li class="active">
-                            <a href="table">
+                            <a href="{{ route('table') }}">
                                 <i class="fas fa-table"></i>Dashboard</a>
                         </li>
                         @if (Auth::user()->detail_user->type_user->name === 'Administrator' ||
                                 Auth::user()->detail_user->type_user->name === 'Super Admin')
                             <li>
-                                <a href="history">
+                                <a href="{{ route('history') }}">
                                     <i class="fas fa-history"></i>History</a>
                             </li>
                         @endif
@@ -118,7 +120,7 @@
                                 <div class="account-wrap">
                                     <div class="account-item clearfix js-item-menu">
                                         <div class="image">
-                                            <img src="images/icon/avatar-01.png" alt="John Doe"
+                                            <img src="images/icon/avatar-01.png" alt="profile"
                                                 oncontextmenu="return false" />
                                         </div>
                                         @if (Auth::check() && Auth::user())
@@ -142,6 +144,10 @@
                                                     </div>
                                                 </div>
                                         @endif
+                                        <div class="account-dropdown__item">
+                                            <a href="{{ route('user-profile') }}">
+                                                <i class="zmdi zmdi-account"></i>Account</a>
+                                        </div>
                                         <div class="account-dropdown__footer">
                                             <a href="{{ route('actionlogout') }}">
                                                 <i class="zmdi zmdi-power"></i>Logout</a>
@@ -255,7 +261,7 @@
                                                 </td>
                                                 <td>
                                                     <div class="table-data-feature" id="editContainer">
-                                                        @if (Auth::user()->detail_user->type_user->name === 'Administrator')                                                            
+                                                        @if (Auth::user()->detail_user->type_user->name === 'Administrator' || Auth::user()->detail_user->type_user->name === 'Super Admin')                                                            
                                                             <button type="button" class="item edit-button"
                                                                 data-toggle="modal" data-id="{{ $item->id }}" data-action="{{ route('get-project-data', ['projectId' => $item->id ]) }}"
                                                                 data-target="#editModal" data-placement="top"
@@ -328,7 +334,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="detail" class="align-items-start">Detail Project:</label>
-                                        <input type="text" class="form-control w-100" name="detail">
+                                        <textarea type="text" class="form-control w-100" name="detail" style="height: 120px;"></textarea>
                                     </div>
                                     <input type="hidden" name="requestor">
                                     <div class="mb-3">
@@ -344,9 +350,14 @@
                                         </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="pic" class="align-items-start">PIC:</label>
-                                        <input type="text" class="form-control w-100" id="pic_project"
-                                            name="pic_project">
+                                        <label for="pic" class="align-items-start">PIC:</label>                                       
+                                            <select class="form-control w-100" id="pic_project" name="pic_project">
+                                                <option disabled value="" {{ $item->pic_project === 'null' ? 'selected' : '' }}>Pilih PIC</option>
+                                                <option value="Joni R" {{ $item->pic_project === 'Joni R' ? 'selected' : '' }}>Joni R</option>
+                                                <option value="Alvian" {{ $item->pic_project === 'Alvian' ? 'selected' : '' }}>Alvian</option>
+                                                <option value="Riyadi" {{ $item->pic_project === 'Riyadi' ? 'selected' : '' }}>Riyadi</option>
+                                                <option value="Twindi" {{ $item->pic_project === 'Twindi' ? 'selected' : '' }}>Twindi</option>
+                                            </select>
                                     </div>
                                 </div>
                                 <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
@@ -370,7 +381,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="update_status">Update Status</label>
-                                        <textarea class="form-control w-100" style="border: 1px solid; border-color:rgb(223, 223, 223)"
+                                        <textarea class="form-control w-100" style="border: 1px solid; border-color:rgb(223, 223, 223); height: 190px"
                                             name="description_project" id="descript" cols="30" rows="10"></textarea>
                                     </div>
                                 </div>
@@ -494,7 +505,7 @@
                 row += '<td><span class="status--process">' + (item.pic_project !== null ? item.pic_project : '') + '</span></td>';
                 row += '<td>' + item.eta_project + '</td>';
                 row += '<td><div class="table-data-feature" id="editContainer">';
-                if (role === 'Administrator') {
+                if (role === 'Administrator' || role === 'Super Admin') {
                     // Generate edit action URL using Blade syntax
                     var editAction = '{{ route('get-project-data', ['projectId' => ':id']) }}';
                     editAction = editAction.replace(':id', item.id);

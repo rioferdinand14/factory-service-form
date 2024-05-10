@@ -47,13 +47,8 @@ class User extends Authenticatable
     public function detail_user()
     {
         return $this->hasOne(DetailUser::class, 'user_id');
-    }
+    }    
 
-    // public function role()
-    // {
-    //     return $this->belongsTo(TypeUser::class, 'type_id');
-    // }
-                                   
     /**
      * Check if the user is an administrator.
      *

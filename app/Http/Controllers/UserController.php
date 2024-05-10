@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\EditProfileRequest;
 use App\Models\TypeUser;
-
 
 class UserController extends Controller
 {
@@ -29,55 +31,42 @@ class UserController extends Controller
                 $role = 'Unknown Role';
             }
 
-            return view('navbar', ['user' => $user, 'role' => $role]);
+            return view('user.profile', ['user' => $user, 'role' => $role]);
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function changePassword(EditProfileRequest $request)
     {
-        //
-    }
+        // dd($request->all());
+       if (Auth::check()) {
+            /** @var \App\Models\User $user **/
+            $user = Auth::user();
+            $oldPassword = $request->get('old_password');
+            $newPassword = $request->get('new_password');
+            $confirmPassword = $request->get('confirm_password');
+            
+            // Check if the old password matches the user's current password
+            if (!Hash::check($oldPassword, $user->password)) {
+                return redirect()->back()->with('error', 'Password lama tidak sesuai.');
+            }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+            // Check if the new password is the same as the old password
+            if (Hash::check($newPassword, $user->password)) {
+                // dd('password match!');
+                return redirect()->back()->with('error', 'Password baru tidak boleh sama dengan password lama.');
+            }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+            // Check if the confirmation password matches the new password
+            if ($newPassword !== $confirmPassword) {
+                dd('password tidak sama');
+                return redirect()->back()->with('error', 'Konfirmasi password tidak sesuai.');
+            }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+            // Update the user's password
+            $user->password = Hash::make($newPassword);
+            $user->save();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+            return redirect()->back()->with('success', 'Password berhasil diubah.');
+       }
     }
 }

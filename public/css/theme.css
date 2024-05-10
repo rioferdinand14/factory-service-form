@@ -67,6 +67,14 @@ input, textarea {
     border: none;
 }
 
+input.form-control:disabled {
+    background-color: #f1f1f1; /* Set background color to white */
+    color: #333; /* Set text color */
+    /* Optionally, you can adjust other styles like border, opacity, etc. */
+    border-color: #ccc; /* Set border color */
+    opacity: 1; /* Ensure full opacity */
+}
+
 button {
     border: none;
     background: none;
@@ -387,6 +395,11 @@ section {
     }
 }
 
+.form-label-bold{
+    color: #333333;
+    font-weight: 700;
+}
+
 .login-form .form-group label {
     display: block;
 }
@@ -659,6 +672,8 @@ section {
         transform: rotate(360deg);
     }
 }
+
+
 
 /* ----- Form ----- */
 .form-header {
