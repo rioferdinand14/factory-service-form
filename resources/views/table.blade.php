@@ -166,6 +166,11 @@
         <!-- MAIN CONTENT-->
         <div class="main-content">
             <div class="section__content section__content--p30">
+                @if(session('error'))
+                   <div class="alert alert-danger">
+                       {{ session('error') }}
+                   </div>
+               @endif
                 <div class="container-fluid" id="table-pagination">
                     <div class="row">
                         <div class="col-md-12">

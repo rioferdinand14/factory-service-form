@@ -58,4 +58,10 @@ class User extends Authenticatable
     {
         return $this->detail_user->type_user->name === 'Administrator'; // Assuming 'name' is the column containing role names in the 'type_user' table
     }
+
+    public function isSuperAdmin()
+    {
+        return $this->detail_user->type_user->name === 'Super Admin';
+    }
+
 }
