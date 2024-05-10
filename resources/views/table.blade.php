@@ -68,7 +68,7 @@
                             <a class="js-arrow" href="{{ route('table') }}">
                                 <i class="fas fa-tachometer-alt"></i>Dashboard</a>
                             <a class="js-arrow" href="{{ route('history') }}">
-                                <i class="fas fa-history"></i>History</a>    
+                                <i class="fas fa-history"></i>History</a>
                         </li>
                     </ul>
                 </div>
@@ -166,11 +166,11 @@
         <!-- MAIN CONTENT-->
         <div class="main-content">
             <div class="section__content section__content--p30">
-                @if(session('error'))
-                   <div class="alert alert-danger">
-                       {{ session('error') }}
-                   </div>
-               @endif
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 <div class="container-fluid" id="table-pagination">
                     <div class="row">
                         <div class="col-md-12">
@@ -230,7 +230,7 @@
                                             <th>Update</th>
                                             <th>status</th>
                                             <th>pic</th>
-                                            <th>ETA</th>
+                                            <th>Expected Finish Date</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -240,49 +240,53 @@
                                                 <td colspan="9" class="text-center"> No Projects Available </td>
                                             </tr>
                                         @else
-                                        @foreach ($projects as $item)
-                                            <tr class="tr">
-                                                <td>{{ $item->input_date }}</td>
-                                                <td>{{ $item->nama_project }}
-                                                    <p>Detail: {{ $item->detail }}</p>
-                                                </td>
-                                                <td class="desc">{{ $item->requestor }}
-                                                    @if ($item->photos_img)
-                                                        <a href="{{ asset('storage/images/' . $item->photos_img) }}"
-                                                            alt="uploaded image"
-                                                            style="text-decoration: none; color:black"
-                                                            target="_blank">View Image</a>
-                                                    @else
-                                                        <p style="cursor: not-allowed">No image</p>
-                                                    @endif
-                                                </td>
-                                                <td>{{ $item->category_project ? $item->category_project : '' }}</td>
-                                                <td>{!! nl2br(e($item->description_project)) !!}</td>
-                                                <td>{{ $item->status }}</td>
-                                                <td>
-                                                    <span class="status--process">{{ $item->pic_project }}</span>
-                                                </td>
-                                                <td>{{ $item->eta_project }}
-                                                </td>
-                                                <td>
-                                                    <div class="table-data-feature" id="editContainer">
-                                                        @if (Auth::user()->detail_user->type_user->name === 'Administrator' || Auth::user()->detail_user->type_user->name === 'Super Admin')                                                            
-                                                            <button type="button" class="item edit-button"
-                                                                data-toggle="modal" data-id="{{ $item->id }}" data-action="{{ route('get-project-data', ['projectId' => $item->id ]) }}"
-                                                                data-target="#editModal" data-placement="top"
-                                                                title="Edit">
-                                                                <i class="zmdi zmdi-edit"></i>
-                                                            </button>
-                                                            <button class="item delete-button-table"
-                                                                data-toggle="tooltip" data-id="{{ $item->id }}" 
-                                                                data-action="{{ route('delete-project', ['projectId' => $item->id]) }}"
-                                                                data-placement="top" title="Delete">
-                                                                <i class="zmdi zmdi-delete"></i>
-                                                            </button>
+                                            @foreach ($projects as $item)
+                                                <tr class="tr">
+                                                    <td>{{ $item->input_date }}</td>
+                                                    <td>{{ $item->nama_project }}
+                                                        <p>Detail: {{ $item->detail }}</p>
+                                                    </td>
+                                                    <td class="desc">{{ $item->requestor }}
+                                                        @if ($item->photos_img)
+                                                            <a href="{{ asset('storage/images/' . $item->photos_img) }}"
+                                                                alt="uploaded image"
+                                                                style="text-decoration: none; color:black"
+                                                                target="_blank">View Image</a>
+                                                        @else
+                                                            <p style="cursor: not-allowed">No image</p>
                                                         @endif
-                                                    </div>
-                                                </td>
-                                        @endforeach
+                                                    </td>
+                                                    <td>{{ $item->category_project ? $item->category_project : '' }}
+                                                    </td>
+                                                    <td>{!! nl2br(e($item->description_project)) !!}</td>
+                                                    <td>{{ $item->status }}</td>
+                                                    <td>
+                                                        <span class="status--process">{{ $item->pic_project }}</span>
+                                                    </td>
+                                                    <td>{{ $item->eta_project }}
+                                                    </td>
+                                                    <td>
+                                                        <div class="table-data-feature" id="editContainer">
+                                                            @if (Auth::user()->detail_user->type_user->name === 'Administrator' ||
+                                                                    Auth::user()->detail_user->type_user->name === 'Super Admin')
+                                                                <button type="button" class="item edit-button"
+                                                                    data-toggle="modal" data-id="{{ $item->id }}"
+                                                                    data-action="{{ route('get-project-data', ['projectId' => $item->id]) }}"
+                                                                    data-target="#editModal" data-placement="top"
+                                                                    title="Edit">
+                                                                    <i class="zmdi zmdi-edit"></i>
+                                                                </button>
+                                                                <button class="item delete-button-table"
+                                                                    data-toggle="tooltip"
+                                                                    data-id="{{ $item->id }}"
+                                                                    data-action="{{ route('delete-project', ['projectId' => $item->id]) }}"
+                                                                    data-placement="top" title="Delete">
+                                                                    <i class="zmdi zmdi-delete"></i>
+                                                                </button>
+                                                            @endif
+                                                        </div>
+                                                    </td>
+                                            @endforeach
                                         @endif
                                         </tr>
                                     </tbody>
@@ -311,16 +315,18 @@
                 <div class="modal-body">
                     @if ($projects->isEmpty())
                         <form id="editTaskHistory" method="POST" autocomplete="off">
-                    @else
-                    <form id="editTaskTable" data-action="{{ route('update-data', ['projectId' => $item->id]) }}" method="POST" autocomplete="off">
+                        @else
+                            <form id="editTaskTable"
+                                data-action="{{ route('update-data', ['projectId' => $item->id]) }}" method="POST"
+                                autocomplete="off">
                     @endif
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="project_id">
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-sm-5 col-md-6">
-                                    {{-- <div class="mb-3">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="project_id">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-5 col-md-6">
+                                {{-- <div class="mb-3">
                                             <label for="date" class="align-items-start">Date:</label>
                                             <div class="input-group date w-100" id="datepickerContainer">
                                                 <input type="text" class="form-control datepicker" id="datepicker" name="input_date"/>
@@ -331,237 +337,261 @@
                                                 </span>
                                             </div>
                                         </div> --}}
-                                    <input type="hidden" class="form-control datepicker" name="input_date" />
-                                    <div class="mb-3">
-                                        <label for="project" class="align-items-start">Project:</label>
-                                        <input type="text" class="form-control w-100" id="nama_project"
-                                            name="nama_project">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="detail" class="align-items-start">Detail Project:</label>
-                                        <textarea type="text" class="form-control w-100" name="detail" style="height: 120px;"></textarea>
-                                    </div>
-                                    <input type="hidden" name="requestor">
-                                    <div class="mb-3">
-                                        <label for="eta" class="align-items-start">ETA:</label>
-                                        <div class="input-group date w-100" id="datepickerContainer">
-                                            <input type="text" class="form-control datepicker " id="etapicker"
-                                                name="eta_project" />
-                                            <span class="input-group-append">
-                                                <span class="input-group-text bg-light d-block">
-                                                    <i class="fa fa-calendar"></i>
-                                                </span>
+                                <input type="hidden" class="form-control datepicker" name="input_date" />
+                                <div class="mb-3">
+                                    <label for="project" class="align-items-start">Project:</label>
+                                    <input type="text" class="form-control w-100" id="nama_project"
+                                        name="nama_project">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="detail" class="align-items-start">Detail Project:</label>
+                                    <textarea type="text" class="form-control w-100" name="detail" style="height: 120px;"></textarea>
+                                </div>
+                                <input type="hidden" name="requestor">
+                                <div class="mb-3">
+                                    <label for="eta" class="align-items-start">Expected Finish Date:</label>
+                                    <div class="input-group date w-100" id="datepickerContainer">
+                                        <input type="text" class="form-control datepicker " id="etapicker"
+                                            name="eta_project" />
+                                        <span class="input-group-append">
+                                            <span class="input-group-text bg-light d-block">
+                                                <i class="fa fa-calendar"></i>
                                             </span>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="pic" class="align-items-start">PIC:</label>                                       
-                                            <select class="form-control w-100" id="pic_project" name="pic_project">
-                                                <option disabled value="" {{ $item->pic_project === 'null' ? 'selected' : '' }}>Pilih PIC</option>
-                                                <option value="Joni R" {{ $item->pic_project === 'Joni R' ? 'selected' : '' }}>Joni R</option>
-                                                <option value="Alvian" {{ $item->pic_project === 'Alvian' ? 'selected' : '' }}>Alvian</option>
-                                                <option value="Riyadi" {{ $item->pic_project === 'Riyadi' ? 'selected' : '' }}>Riyadi</option>
-                                                <option value="Twindi" {{ $item->pic_project === 'Twindi' ? 'selected' : '' }}>Twindi</option>
-                                            </select>
+                                        </span>
                                     </div>
                                 </div>
-                                <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
-                                    <div class="mb-3">
-                                        <label for="category" class="align-items-start">Category:</label>
-                                        <select class="form-control w-100" id="category_project" name="category_project">
-                                            <option disabled value="" {{ $item->category_project === 'null' ? 'selected' : '' }}>Pilih Kategori</option>
-                                            <option value="Infrastructure" {{ $item->category_project === 'Infrastructure' ? 'selected' : '' }}>Infrastructure</option>
-                                            <option value="Maintenance" {{ $item->category_project === 'Maintenance' ? 'selected' : '' }}>Maintenance</option>
-                                            <option value="Tool Store" {{ $item->category_project === 'Tool Store' ? 'selected' : '' }}>Tool Store</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="status">Status</label>
-                                        <select class="form-control w-100" aria-label="Default select example"
-                                            id="status" name="status">
-                                            <option value="Open">Open</option>
-                                            <option value="On Progress">On Progress</option>
-                                            <option value="Done">Done</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="update_status">Update Status</label>
-                                        <textarea class="form-control w-100" style="border: 1px solid; border-color:rgb(223, 223, 223); height: 190px"
-                                            name="description_project" id="descript" cols="30" rows="10"></textarea>
-                                    </div>
+                                <div class="mb-3">
+                                    <label for="pic" class="align-items-start">PIC:</label>
+                                    <select class="form-control w-100" id="pic_project" name="pic_project">
+                                        <option disabled value="">Pilih PIC</option>
+                                        <option value="Joni R"
+                                            {{ isset($item->pic_project) === 'Joni R' ? 'selected' : '' }}>Joni R
+                                        </option>
+                                        <option value="Alvian"
+                                            {{ isset($item->pic_project) === 'Alvian' ? 'selected' : '' }}>Alvian
+                                        </option>
+                                        <option value="Riyadi"
+                                            {{ isset($item->pic_project) === 'Riyadi' ? 'selected' : '' }}>Riyadi
+                                        </option>
+                                        <option value="Twindi"
+                                            {{ isset($item->pic_project) === 'Twindi' ? 'selected' : '' }}>Twindi
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="submit" id="saveData" class="btn btn-primary">Save</button>
+                            <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
+                                <div class="mb-3">
+                                    <label for="category" class="align-items-start">Category:</label>
+                                    <select class="form-control w-100" id="category_project" name="category_project">
+                                        <option disabled value="">Pilih Kategori</option>
+                                        <option value="Infrastructure"
+                                            {{ isset($item->pic_project) === 'Infrastructure' ? 'selected' : '' }}>
+                                            Infrastructure</option>
+                                        <option value="Maintenance"
+                                            {{ isset($item->pic_project) === 'Maintenance' ? 'selected' : '' }}>
+                                            Maintenance</option>
+                                        <option value="Tool Store"
+                                            {{ isset($item->pic_project) === 'Tool Store' ? 'selected' : '' }}>Tool
+                                            Store
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="status">Status</label>
+                                    <select class="form-control w-100" aria-label="Default select example"
+                                        id="status" name="status">
+                                        <option value="Open">Open</option>
+                                        <option value="On Progress">On Progress</option>
+                                        <option value="Done">Done</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="update_status">Update Status</label>
+                                    <textarea class="form-control w-100" style="border: 1px solid; border-color:rgb(223, 223, 223); height: 190px"
+                                        name="description_project" id="descript" cols="30" rows="10"></textarea>
+                                </div>
                             </div>
-                    </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" id="saveData" class="btn btn-primary">Save</button>
+                        </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
 
 
-    <div id="UserRole" data-role="{{ Auth::user()->detail_user->type_user->name }}" style="display: none"></div>
+        <div id="UserRole" data-role="{{ Auth::user()->detail_user->type_user->name }}" style="display: none">
+        </div>
 
 
-    <!-- Jquery JS-->
+        <!-- Jquery JS-->
 
 
 
-    <script>
-        $(document).ready(function() {
-            $('#datepicker').datepicker({
-                format: 'mm/dd/yyyy', // Adjust the format as needed
-                todayHighlight: true,
-                autoclose: true,
-                orientation: 'bottom'
+        <script>
+            $(document).ready(function() {
+                $('#datepicker').datepicker({
+                    format: 'mm/dd/yyyy', // Adjust the format as needed
+                    todayHighlight: true,
+                    autoclose: true,
+                    orientation: 'bottom'
+                });
+
+                // Set the date for the datepickerInput to today
+                $('.datepickerInput').datepicker('setDate', new Date());
             });
+        </script>
 
-            // Set the date for the datepickerInput to today
-            $('.datepickerInput').datepicker('setDate', new Date());
-        });
-    </script>
+        <script>
+            $(document).ready(function() {
+                $('#etapicker').datepicker({
+                    format: 'mm/dd/yyyy', // Adjust the format as needed
+                    todayHighlight: true,
+                    autoclose: true,
+                    orientation: 'bottom'
+                });
 
-    <script>
-        $(document).ready(function() {
-            $('#etapicker').datepicker({
-                format: 'mm/dd/yyyy', // Adjust the format as needed
-                todayHighlight: true,
-                autoclose: true,
-                orientation: 'bottom'
+                // Set the date for the datepickerInput to today
+                $('.datepickerInput').datepicker('setDate', new Date());
             });
+        </script>
 
-            // Set the date for the datepickerInput to today
-            $('.datepickerInput').datepicker('setDate', new Date());
-        });
-    </script>
+        <script>
+            var baseUrl = "{{ asset('storage/images/') }}";
+        </script>
 
-    <script>
-        var baseUrl = "{{ asset('storage/images/') }}";
-    </script>
+        <script>
+            // Function to handle search input
+            $(document).ready(function() {
+                $('#searchInput').on('input', function() {
+                    var query = $(this).val();
 
-    <script>
-        // Function to handle search input
-        $(document).ready(function() {
-            $('#searchInput').on('input', function() {
-                var query = $(this).val();
-
-                if (query !== '') {
-                $.ajax({
-                    url: "{{ route('search') }}",
-                    method: 'GET',
-                    data: { query: query },
-                    dataType: 'json',
-                    success: function(data) {
-                        if (data.data.length > 0) {
-                            updateTable(data);
-                        } else {
-                            $('#dataTable tbody').html('<tr class="tr"><td colspan="9" class="text-center">Project tidak ditemukan</td></tr>'); // Display "No Projects Available" message
-                        }
-                    },
-                    error: function(error) {
-                        console.error('Error fetching search results:', error);
+                    if (query !== '') {
+                        $.ajax({
+                            url: "{{ route('search') }}",
+                            method: 'GET',
+                            data: {
+                                query: query
+                            },
+                            dataType: 'json',
+                            success: function(data) {
+                                if (data.data.length > 0) {
+                                    updateTable(data);
+                                } else {
+                                    $('#dataTable tbody').html(
+                                        '<tr class="tr"><td colspan="9" class="text-center">Project tidak ditemukan</td></tr>'
+                                    ); // Display "No Projects Available" message
+                                }
+                            },
+                            error: function(error) {
+                                console.error('Error fetching search results:', error);
+                            }
+                        });
+                    } else {
+                        refreshTable(); // Empty search query, refresh the table
                     }
                 });
-                } else {
-                refreshTable(); // Empty search query, refresh the table
-                }
             });
-        });
-    </script>
+        </script>
 
-    <script>
-       // Function to refresh table data
-       function refreshTable(page = 1) {
-            $.ajax({
-                url: "{{ route('get-latest-projects') }}?page=" + page,
-                method: 'GET',
-                success: function(response) {
-                    updateTable(response);
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error refreshing table:', error);
-                }
-            });
-        }
+        <script>
+            // Function to refresh table data
+            function refreshTable(page = 1) {
+                $.ajax({
+                    url: "{{ route('get-latest-projects') }}?page=" + page,
+                    method: 'GET',
+                    success: function(response) {
+                        updateTable(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error refreshing table:', error);
+                    }
+                });
+            }
 
-        // Function to update table with new data
-        function updateTable(response) {
-            var role = $('#UserRole').data('role');
-            var tbody = $('.table-responsive-data2 table tbody');
-            tbody.empty();
+            // Function to update table with new data
+            function updateTable(response) {
+                var role = $('#UserRole').data('role');
+                var tbody = $('.table-responsive-data2 table tbody');
+                tbody.empty();
 
-            $.each(response.data, function(index, item) {
-                var row = '<tr class="tr">';
-                row += '<td>' + item.input_date + '</td>';
-                row += '<td>' + item.nama_project + '<p>Detail: ' + item.detail + '</p></td>';
-                row += '<td class="desc">' + item.requestor;
-                if (item.photos_img) {
-                    row += '<a href="' + baseUrl + '/' + item.photos_img + '" style="text-decoration: none; color:black" target="_blank" alt="Uploaded Image">View Image</a>';
-                } else {
-                    row += '<p style="cursor: not-allowed">No Image</p>';
-                }
-                row += '</td>';
-                var categoryProject = item.category_project ? item.category_project : '';
-                row += '<td>' + categoryProject + '</td>';
-                row += '<td>' + nl2brJS(item.description_project) + '</td>';
-                row += '<td>' + item.status + '</td>';
-                row += '<td><span class="status--process">' + (item.pic_project !== null ? item.pic_project : '') + '</span></td>';
-                row += '<td>' + item.eta_project + '</td>';
-                row += '<td><div class="table-data-feature" id="editContainer">';
-                if (role === 'Administrator' || role === 'Super Admin') {
-                    // Generate edit action URL using Blade syntax
-                    var editAction = '{{ route('get-project-data', ['projectId' => ':id']) }}';
-                    editAction = editAction.replace(':id', item.id);
-                    row += '<button style="color: red" type="button" class="item edit-button" data-toggle="modal" data-target="#editModal" data-id="' + item.id + '" data-action="' + editAction + '" data-placement="top" title="Edit"><i class="zmdi zmdi-edit"></i></button>';
-                    // For delete action, you can directly use PHP to generate the route
-                    var deleteAction = '{{ route('delete-project', ['projectId' => ':id']) }}';
-                    deleteAction = deleteAction.replace(':id', item.id);
-                    row += '<button type="button" class="item delete-button-table" data-id="' + item.id + '" data-action="' + deleteAction + '" data-placement="top" title="Delete"><i class="zmdi zmdi-delete"></i></button>';
-                }
-                row += '</div></td></tr>';
-                tbody.append(row);
-            });
-            $('.pagination').html(response.links);
-        }
+                $.each(response.data, function(index, item) {
+                    var row = '<tr class="tr">';
+                    row += '<td>' + item.input_date + '</td>';
+                    row += '<td>' + item.nama_project + '<p>Detail: ' + item.detail + '</p></td>';
+                    row += '<td class="desc">' + item.requestor;
+                    if (item.photos_img) {
+                        row += '<a href="' + baseUrl + '/' + item.photos_img +
+                            '" style="text-decoration: none; color:black" target="_blank" alt="Uploaded Image">View Image</a>';
+                    } else {
+                        row += '<p style="cursor: not-allowed">No Image</p>';
+                    }
+                    row += '</td>';
+                    var categoryProject = item.category_project ? item.category_project : '';
+                    row += '<td>' + categoryProject + '</td>';
+                    row += '<td>' + nl2brJS(item.description_project) + '</td>';
+                    row += '<td>' + item.status + '</td>';
+                    row += '<td><span class="status--process">' + (item.pic_project !== null ? item.pic_project : '') +
+                        '</span></td>';
+                    row += '<td>' + item.eta_project + '</td>';
+                    row += '<td><div class="table-data-feature" id="editContainer">';
+                    if (role === 'Administrator' || role === 'Super Admin') {
+                        // Generate edit action URL using Blade syntax
+                        var editAction = '{{ route('get-project-data', ['projectId' => ':id']) }}';
+                        editAction = editAction.replace(':id', item.id);
+                        row +=
+                            '<button style="color: red" type="button" class="item edit-button" data-toggle="modal" data-target="#editModal" data-id="' +
+                            item.id + '" data-action="' + editAction +
+                            '" data-placement="top" title="Edit"><i class="zmdi zmdi-edit"></i></button>';
+                        // For delete action, you can directly use PHP to generate the route
+                        var deleteAction = '{{ route('delete-project', ['projectId' => ':id']) }}';
+                        deleteAction = deleteAction.replace(':id', item.id);
+                        row += '<button type="button" class="item delete-button-table" data-id="' + item.id +
+                            '" data-action="' + deleteAction +
+                            '" data-placement="top" title="Delete"><i class="zmdi zmdi-delete"></i></button>';
+                    }
+                    row += '</div></td></tr>';
+                    tbody.append(row);
+                });
+                $('.pagination').html(response.links);
+            }
+        </script>
 
-    </script>
-    
-    <script>
-        
-    </script>
+        <script></script>
 
 
 
 
 
-    <!-- Bootstrap JS-->
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="vendor/bootstrap-4.1/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+        <!-- Bootstrap JS-->
+        {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="vendor/bootstrap-4.1/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <!-- Vendor JS       -->
-    <script src="vendor/slick/slick.min.js"></script>
-    <script src="vendor/wow/wow.min.js"></script>
-    <script src="vendor/animsition/animsition.min.js"></script>
-    <script src="vendor/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
-    <script src="vendor/counter-up/jquery.waypoints.min.js"></script>
-    <script src="vendor/counter-up/jquery.counterup.min.js"></script>
-    <script src="vendor/circle-progress/circle-progress.min.js"></script>
-    <script src="vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
-    <script src="vendor/chartjs/Chart.bundle.min.js"></script>
-    <script src="vendor/select2/select2.min.js"></script>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+        <!-- Vendor JS       -->
+        <script src="vendor/slick/slick.min.js"></script>
+        <script src="vendor/wow/wow.min.js"></script>
+        <script src="vendor/animsition/animsition.min.js"></script>
+        <script src="vendor/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+        <script src="vendor/counter-up/jquery.waypoints.min.js"></script>
+        <script src="vendor/counter-up/jquery.counterup.min.js"></script>
+        <script src="vendor/circle-progress/circle-progress.min.js"></script>
+        <script src="vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
+        <script src="vendor/chartjs/Chart.bundle.min.js"></script>
+        <script src="vendor/select2/select2.min.js"></script>
 
-    
 
-    <!-- Main JS-->
-    <script src="js/main.js"></script>
+
+        <!-- Main JS-->
+        <script src="js/main.js"></script>
 
 
 
