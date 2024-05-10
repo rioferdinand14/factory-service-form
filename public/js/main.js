@@ -103,8 +103,8 @@ $(document).on('click', '.edit-button', function() {
           $('#editModal input[name="input_date"]').val(response.input_date);
           $('#editModal input[name="eta_project"]').val(response.eta_project);
           $('#editModal input[name="requestor"]').val(response.requestor);
-          $('#editModal input[name="detail"]').val(response.detail);
-          $('#editModal input[name="pic_project"]').val(response.pic_project);
+          $('#editModal textarea[name="detail"]').val(response.detail);
+          $('#editModal select[name="pic_project"]').val(response.pic_project);
           $('#editModal input[name="nama_project"]').val(response.nama_project);
           $('#editModal select[name="category_project"]').val(response.category_project);
           $('#editModal select[name="status"]').val(response.status);

@@ -116,6 +116,7 @@ class HomeController extends Controller
         $project->requestor = $request->input('requestor');
         $project->pic_project = $request->input('pic_project');
         $project->nama_project = $request->input('nama_project');
+        $project->detail = $request->input('detail');
         $project->category_project = $request->input('category_project');
         $project->status = $request->input('status');
         $project->description_project = $request->input('description_project');
